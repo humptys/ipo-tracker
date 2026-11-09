@@ -1163,21 +1163,30 @@ function initScatterSlider() {
 function renderAlerts() {
   const t = todayISO();
   const tm = iso(new Date(Date.now() + 86400000));
-  const msgs = [];
+  // 날짜(오늘/내일)별로 묶고, 그 안에서는 종류(출금 → 상장 → 청약 → 환불) 순서로 보여 줌
+  const ORDER = { cash: 0, list: 1, sub: 2, refund: 3 };
+  const day = { today: [], tomorrow: [] };
+  const add = (when, type, tag, r, detail) => day[when].push({ type, tag, r, detail });
   for (const r of S.records) {
     if (r.allocated_qty !== null && r.allocated_qty !== undefined && r.allocated_qty !== "" && +r.allocated_qty === 0) continue;
-    if (r.listing_date === t) msgs.push({ r, html: `📈 오늘 <b>${esc(r.name)}</b> 상장일${r.allocated_qty ? ` (${won(r.allocated_qty)}주 · 공모가 ${won(r.offer_price)}원)` : ""}` });
-    else if (r.listing_date === tm) msgs.push({ r, html: `내일 <b>${esc(r.name)}</b> 상장` });
-    if (r.sub_end === t) msgs.push({ r, html: `오늘 <b>${esc(r.name)}</b> 청약 마감` });
-    if (r.refund_date === t) msgs.push({ r, html: `오늘 <b>${esc(r.name)}</b> 환불일 — 배정 수량 입력` });
+    if (r.listing_date === t) add("today", "list", "상장", r, r.allocated_qty ? `${won(r.allocated_qty)}주 · 공모가 ${won(r.offer_price)}원` : "");
+    else if (r.listing_date === tm) add("tomorrow", "list", "상장", r, r.allocated_qty ? `${won(r.allocated_qty)}주` : "");
+    if (r.sub_end === t) add("today", "sub", "청약 마감", r, r.broker || "");
+    else if (r.sub_end === tm) add("tomorrow", "sub", "청약 마감", r, r.broker || "");
+    if (r.refund_date === t) add("today", "refund", "환불", r, "배정 수량 입력");
   }
   for (const p of pendingCash()) {
     if (p.date > t) continue;
-    msgs.unshift({ r: p.r, html: `💰 <b>${esc(p.r.name)}</b> 매도대금 ${won(p.amt)}원 출금 가능${p.r.broker ? ` (${esc(p.r.broker)})` : ""} — 이체했으면 체크` });
+    add("today", "cash", "출금", p.r, `${won(p.amt)}원${p.r.broker ? ` · ${esc(p.r.broker)}` : ""} · 이체했으면 체크`);
   }
+  const chip = (m) => `<button class="al-chip t-${m.type}" data-rec="${esc(m.r.id)}"><span class="al-tag">${m.tag}</span><b>${esc(m.r.name)}</b>${m.detail ? `<small>${m.detail}</small>` : ""}</button>`;
+  const row = (key, label) => {
+    const list = day[key].sort((a, b) => ORDER[a.type] - ORDER[b.type]);
+    return list.length ? `<div class="al-row"><span class="al-day ${key}">${label}</span><div class="al-list">${list.map(chip).join("")}</div></div>` : "";
+  };
   const bar = $("#alertBar");
-  bar.innerHTML = msgs.map((m) => `<button class="chip-btn" data-rec="${esc(m.r.id)}">${m.html}</button>`).join("");
-  bar.classList.toggle("hidden", !msgs.length);
+  bar.innerHTML = row("today", "오늘") + row("tomorrow", "내일");
+  bar.classList.toggle("hidden", !day.today.length && !day.tomorrow.length);
 }
 
 /* ============================================================ 증권사 수수료 표 */

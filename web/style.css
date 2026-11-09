@@ -94,9 +94,23 @@ main { max-width: 1320px; margin: 0 auto; padding: 20px 24px 60px; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; }
 
 /* 알림 바 */
-.alert-bar { background: var(--up-soft); color: var(--text); border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
-.alert-bar b { color: var(--up); }
-.alert-bar .chip-btn { border: 0; background: transparent; padding: 0; text-decoration: underline; color: inherit; }
+.alert-bar { background: var(--surface); color: var(--text); border-bottom: 1px solid var(--border); padding: 10px 24px; display: grid; gap: 8px; }
+.al-row { display: flex; gap: 10px; align-items: flex-start; }
+.al-day { flex: 0 0 auto; font-size: 12px; font-weight: 700; padding: 5px 9px; border-radius: 999px; line-height: 1.2; margin-top: 3px; }
+.al-day.today { background: var(--text); color: var(--surface); }
+.al-day.tomorrow { background: var(--surface-2); color: var(--muted); }
+.al-list { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.al-chip { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--border); background: var(--surface); border-radius: 10px; padding: 5px 10px 5px 5px; color: var(--text); font-size: 14px; max-width: 100%; text-align: left; }
+.al-chip:hover { border-color: var(--muted); }
+.al-chip b { white-space: nowrap; }
+.al-chip small { color: var(--muted); font-size: 12px; }
+.al-tag { font-size: 11px; font-weight: 700; padding: 3px 7px; border-radius: 6px; white-space: nowrap; }
+.t-sub .al-tag { background: var(--sub-soft); color: var(--sub); }
+.t-list .al-tag { background: var(--list-soft); color: var(--list); }
+.t-refund .al-tag { background: var(--refund-soft); color: var(--refund); }
+.t-cash .al-tag { background: #e3f6ea; color: #0f7a3d; }
+:root[data-theme="dark"] .t-cash .al-tag { background: #143323; color: #5fd08f; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .t-cash .al-tag { background: #143323; color: #5fd08f; } }
 
 .conn-bar { background: var(--accent-soft); border-bottom: 1px solid var(--border); padding: 8px 24px; font-size: 13px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .conn-bar button { padding: 3px 10px; font-size: 12px; }
