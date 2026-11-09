@@ -26,7 +26,7 @@ jobs:
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           RECORDS_TOKEN: ${{ secrets.RECORDS_TOKEN }}
-          RECORDS_REPO: humptys/claud1
+          RECORDS_REPO: humptys/ipo-records
           RECORDS_PATH: ipo-tracker/records.json
           APP_URL: https://humptys.github.io/ipo-tracker/
           TEST: ${{ inputs.test && '1' || '' }}

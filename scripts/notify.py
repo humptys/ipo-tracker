@@ -3,7 +3,7 @@
 
 환경변수
   NTFY_TOPIC    (필수) ntfy 앱에서 구독할 주제 이름. 남이 추측 못 하게 길고 랜덤하게.
-  RECORDS_REPO  기록이 저장된 (비공개) 저장소. 예: humptys/claud1
+  RECORDS_REPO  기록이 저장된 (비공개) 저장소. 예: humptys/ipo-records
   RECORDS_PATH  저장소 안의 기록 파일 경로 (기본 ipo-tracker/records.json)
   RECORDS_TOKEN 그 저장소를 읽을 수 있는 토큰 (Contents: Read)
   APP_URL       (선택) 알림을 눌렀을 때 열 주소 (GitHub Pages 주소)
@@ -49,9 +49,11 @@ def load_records():
         with urllib.request.urlopen(req, timeout=20) as r:
             j = json.load(r)
     except urllib.error.HTTPError as e:
-        if e.code == 404:
-            print("기록 파일이 아직 없어요:", path)
-            return []
+        # 토큰이 그 저장소에 권한이 없어도 GitHub은 404를 줌 -> 알림 없이 조용히 넘어가지 않도록 실패 처리
+        if e.code in (401, 403, 404):
+            sys.exit("기록을 읽지 못했어요 (HTTP %d): %s/%s\n"
+                     "RECORDS_TOKEN이 %s 저장소의 Contents 읽기 권한을 가진 토큰인지, 파일 경로가 맞는지 확인하세요."
+                     % (e.code, repo, path, repo))
         raise
     return json.loads(base64.b64decode(j["content"]).decode("utf-8")).get("records", [])
 

@@ -4,7 +4,7 @@
 
 - **앱 주소**: https://humptys.github.io/ipo-tracker/
 - **공모주 일정**: GitHub Actions가 6시간마다 [38커뮤니케이션](https://www.38.co.kr/html/fund/)에서 가져와 `web/data/schedule.json`에 저장합니다.
-- **내 기록**: 비공개 저장소 `claud1`의 `ipo-tracker/records.json`에 저장합니다. 앱의 ⚙ 설정에 토큰을 한 번 넣으면 핸드폰·PC에서 같은 기록을 봅니다.
+- **내 기록**: 비공개 저장소 `ipo-records`의 `ipo-tracker/records.json`에 저장합니다. 앱의 ⚙ 설정에 토큰을 한 번 넣으면 핸드폰·PC에서 같은 기록을 봅니다.
 - **상장일 알림**: 매일 08:30(KST)에 [ntfy](https://ntfy.sh) 앱으로 푸시를 보냅니다.
 
 ## 사용법
@@ -18,7 +18,7 @@
 |---|---|---|
 | Settings → Pages | Source | GitHub Actions |
 | Settings → Secrets and variables → Actions | `NTFY_TOPIC` | ntfy 앱에서 구독할 주제 이름 |
-| 〃 | `RECORDS_TOKEN` | claud1 Contents 읽기 권한이 있는 fine-grained 토큰 |
+| 〃 | `RECORDS_TOKEN` | ipo-records Contents 읽기 권한이 있는 fine-grained 토큰 |
 
 ## 구조
 ```
