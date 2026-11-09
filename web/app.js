@@ -1005,59 +1005,121 @@ function allocKind(r) {
   if (+r.alloc_equal > 0) return "equal";
   return "none";
 }
+const fmtComp = (v) => (v >= 100 ? won(Math.round(v)) : v >= 10 ? v.toFixed(0) : v.toFixed(1)) + ":1";
+const SCATTERS = {
+  entry: {
+    ids: ["#entryChart", "#entryTable", "#entryCorr"],
+    get: (r) => (r.entry_score != null && r.entry_score !== "" && isFinite(+r.entry_score) ? +r.entry_score : null),
+    label: "진입가능척도", short: "척도", ka: "척도가", wa: "척도와",
+    axis: "진입가능척도 (← 높음 · 낮을수록 좋음 →)",
+    empty: (n) => `매도한 종목 중 진입가능척도가 기록된 게 ${n}건이에요. 2건 이상이면 그래프가 나와요.<br><small>청약 메시지의 '*진입가능척도'가 자동으로 기록되고, 기록 편집에서 직접 넣을 수도 있어요.</small>`,
+    lowerBetter: true, log: false, fmt: (v) => String(Math.round(v)),
+  },
+  inst: {
+    ids: ["#instChart", "#instTable", "#instCorr"],
+    get: (r) => { const v = parseRatio(r.inst_competition); return v > 0 ? v : null; },
+    label: "기관경쟁률", short: "경쟁률", ka: "경쟁률이", wa: "경쟁률과",
+    axis: "기관경쟁률 (로그 눈금 · 오른쪽일수록 높음 →)",
+    empty: (n) => `매도한 종목 중 기관경쟁률을 알 수 있는 게 ${n}건이에요. 2건 이상이면 그래프가 나와요.<br><small>공모주 일정(38)에서 자동으로 채워지고, 기록 편집에서 직접 넣을 수도 있어요.</small>`,
+    lowerBetter: false, log: true, fmt: fmtComp,
+  },
+};
 function renderEntry(sold) {
+  renderScatter(sold, SCATTERS.entry);
+  renderScatter(sold, SCATTERS.inst);
+}
+function renderScatter(sold, cfg) {
   const pts = sold
-    .filter((x) => x.r.entry_score != null && x.r.entry_score !== "" && isFinite(+x.r.entry_score) && x.k.ret != null)
-    .map((x) => ({ x: +x.r.entry_score, y: x.k.ret * 100, r: x.r, kind: allocKind(x.r) }));
-  const chart = $("#entryChart"), table = $("#entryTable"), corr = $("#entryCorr");
+    .map((x) => ({ raw: cfg.get(x.r), y: x.k.ret == null ? null : x.k.ret * 100, r: x.r, kind: allocKind(x.r) }))
+    .filter((p) => p.raw != null && p.y != null)
+    .map((p) => ({ ...p, x: cfg.log ? Math.log10(p.raw) : p.raw }));
+  const [chart, table, corr] = cfg.ids.map((id) => $(id));
   if (pts.length < 2) {
-    chart.innerHTML = `<p class="empty">매도한 종목 중 진입가능척도가 기록된 게 ${pts.length}건이에요. 2건 이상이면 그래프가 나와요.<br><small>청약 메시지의 '*진입가능척도'가 자동으로 기록되고, 기록 편집에서 직접 넣을 수도 있어요.</small></p>`;
+    chart.innerHTML = `<p class="empty">${cfg.empty(pts.length)}</p>`;
     table.innerHTML = ""; corr.textContent = "";
     return;
   }
-  // 상관계수 + 회귀선
+  // 상관계수 + 회귀선 (경쟁률은 로그값 기준)
   const n = pts.length, mx = pts.reduce((a, p) => a + p.x, 0) / n, my = pts.reduce((a, p) => a + p.y, 0) / n;
   let sxy = 0, sxx = 0, syy = 0;
   for (const p of pts) { sxy += (p.x - mx) * (p.y - my); sxx += (p.x - mx) ** 2; syy += (p.y - my) ** 2; }
   const rCoef = sxx && syy ? sxy / Math.sqrt(sxx * syy) : null;
   const slope = sxx ? sxy / sxx : 0, icpt = my - slope * mx;
-  // 진입가능척도는 낮을수록 좋음 → 음(-)의 상관이면 '척도가 낮을수록 수익률이 높다'
   const a = rCoef == null ? 0 : Math.abs(rCoef);
   const strength = a >= 0.7 ? "뚜렷하게" : a >= 0.4 ? "어느 정도" : a >= 0.2 ? "약하게" : "";
-  const trendTxt = rCoef == null ? "" : a < 0.2 ? "척도와 수익률 관계가 거의 없음" : `척도가 낮을수록 수익률이 ${strength} ${rCoef < 0 ? "높음" : "낮음"}`;
-  corr.textContent = rCoef == null ? "" : `· 상관계수 ${rCoef.toFixed(2)} · ${trendTxt} (${n}건)`;
+  const dir = cfg.lowerBetter ? "낮을수록" : "높을수록";
+  const up = cfg.lowerBetter ? rCoef < 0 : rCoef > 0;
+  const trendTxt = rCoef == null ? "" : a < 0.2 ? `${cfg.wa} 수익률 관계가 거의 없음` : `${cfg.ka} ${dir} 수익률이 ${strength} ${up ? "높음" : "낮음"}`;
+  corr.textContent = rCoef == null ? "" : `상관계수 ${rCoef.toFixed(2)} · ${trendTxt} (${n}건)`;
 
-  // 산점도 (SVG)
+  // 산점도 (SVG) — 오른쪽이 '좋은 쪽'이 되도록 척도는 X축 반전
   const W = 600, H = 280, L = 48, R = 14, T = 14, B = 34;
   let x0 = Math.min(...pts.map((p) => p.x)), x1 = Math.max(...pts.map((p) => p.x));
   let y0 = Math.min(0, ...pts.map((p) => p.y)), y1 = Math.max(0, ...pts.map((p) => p.y));
   const padX = (x1 - x0 || 1) * 0.08, padY = (y1 - y0 || 1) * 0.1;
-  x0 = Math.max(0, x0 - padX); x1 += padX; y0 -= padY; y1 += padY; // 척도는 0 이상이라 축도 0 아래로 안 내려감
-  const sx = (v) => L + ((x1 - v) / (x1 - x0)) * (W - L - R); // X축 반전: 오른쪽일수록 척도 낮음(좋음)
+  x0 -= padX; x1 += padX; y0 -= padY; y1 += padY;
+  if (!cfg.log) x0 = Math.max(0, x0); // 척도는 0 이상
+  const frac = (v) => (v - x0) / (x1 - x0);
+  const sx = (v) => L + (cfg.lowerBetter ? 1 - frac(v) : frac(v)) * (W - L - R);
   const sy = (v) => T + (1 - (v - y0) / (y1 - y0)) * (H - T - B);
   const ticks = (a, b, k) => Array.from({ length: k + 1 }, (_, i) => a + ((b - a) * i) / k);
-  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="진입가능척도 대비 수익률 산점도">`;
+  let xt;
+  if (cfg.log) {
+    xt = [];
+    for (let e = Math.floor(x0); e <= Math.ceil(x1); e++) for (const m of [1, 2, 5]) { const v = Math.log10(m * 10 ** e); if (v >= x0 && v <= x1) xt.push(v); }
+    if (xt.length > 6) xt = xt.filter((v) => Math.abs(v - Math.round(v)) < 1e-9);
+    if (xt.length < 2) xt = ticks(x0, x1, 3);
+  } else xt = ticks(x0, x1, 4);
+  const xLabel = (v) => (cfg.log ? fmtComp(10 ** v).replace(":1", "") : String(Math.round(v)));
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${cfg.label} 대비 수익률 산점도">`;
   for (const v of ticks(y0, y1, 4)) svg += `<line class="ax" x1="${L}" x2="${W - R}" y1="${sy(v)}" y2="${sy(v)}"/><text x="${L - 6}" y="${sy(v) + 4}" text-anchor="end">${Math.round(v)}%</text>`;
-  for (const v of ticks(x1, x0, 4)) svg += `<text x="${sx(v)}" y="${H - B + 16}" text-anchor="middle">${Math.round(v)}</text>`;
-  svg += `<text x="${(L + W - R) / 2}" y="${H - 4}" text-anchor="middle">진입가능척도 (← 높음 · 낮을수록 좋음 →)</text>`;
+  for (const v of xt) svg += `<text x="${sx(v)}" y="${H - B + 16}" text-anchor="middle">${xLabel(v)}</text>`;
+  svg += `<text x="${(L + W - R) / 2}" y="${H - 4}" text-anchor="middle">${cfg.axis}</text>`;
   if (y0 < 0 && y1 > 0) svg += `<line class="zero" x1="${L}" x2="${W - R}" y1="${sy(0)}" y2="${sy(0)}"/>`;
   svg += `<line class="trend" x1="${sx(x0)}" y1="${sy(icpt + slope * x0)}" x2="${sx(x1)}" y2="${sy(icpt + slope * x1)}"/>`;
-  for (const p of pts) svg += `<circle class="k-${p.kind}" cx="${sx(p.x)}" cy="${sy(p.y)}" r="5.5" data-rec="${esc(p.r.id)}"><title>${esc(p.r.name)} · ${ALLOC_LABEL[p.kind]} · 척도 ${p.x} · 수익률 ${p.y >= 0 ? "+" : ""}${p.y.toFixed(1)}%</title></circle>`;
+  for (const p of pts) svg += `<circle class="k-${p.kind}" cx="${sx(p.x)}" cy="${sy(p.y)}" r="5.5" data-rec="${esc(p.r.id)}"><title>${esc(p.r.name)} · ${ALLOC_LABEL[p.kind]} · ${cfg.short} ${cfg.fmt(p.raw)} · 수익률 ${p.y >= 0 ? "+" : ""}${p.y.toFixed(1)}%</title></circle>`;
   const present = ["both", "equal", "none"].filter((k) => pts.some((p) => p.kind === k));
   const legend = `<div class="entry-legend">${present.map((k) => `<span><i class="k-${k}"></i>${ALLOC_LABEL[k]} ${pts.filter((p) => p.kind === k).length}</span>`).join("")}</div>`;
   chart.innerHTML = legend + svg + `</svg>`;
 
   // 구간별 (데이터 4분위로 나눔, 적으면 2~3구간)
-  const sorted = pts.slice().sort((a, b) => a.x - b.x);
+  const sorted = pts.slice().sort((a, b) => a.raw - b.raw);
   const k = n >= 12 ? 4 : n >= 6 ? 3 : 2;
   const groups = Array.from({ length: k }, (_, i) => sorted.slice(Math.round((i * n) / k), Math.round(((i + 1) * n) / k))).filter((g) => g.length);
-  table.innerHTML = `<thead><tr><th>척도 구간</th><th class="r">건수</th><th class="r">평균 수익률</th><th class="r">승률</th></tr></thead><tbody>` +
+  table.innerHTML = `<thead><tr><th>${cfg.short} 구간</th><th class="r">건수</th><th class="r">평균 수익률</th><th class="r">승률</th></tr></thead><tbody>` +
     groups.map((g) => {
       const avg = g.reduce((a, p) => a + p.y, 0) / g.length;
       const win = g.filter((p) => p.y > 0).length / g.length;
-      return `<tr><td>${Math.round(g[0].x)} ~ ${Math.round(g[g.length - 1].x)}</td><td class="r">${g.length}</td>
+      return `<tr><td>${cfg.fmt(g[0].raw)} ~ ${cfg.fmt(g[g.length - 1].raw)}</td><td class="r">${g.length}</td>
         <td class="r ${cls(avg)}"><b>${avg >= 0 ? "+" : ""}${avg.toFixed(1)}%</b></td><td class="r">${Math.round(win * 100)}%</td></tr>`;
     }).join("") + "</tbody>";
+}
+
+/** 산점도 카드: 옆으로 밀기(스크롤 스냅) + 상단 버튼 + 점 표시 */
+function initScatterSlider() {
+  const track = $("#scatterTrack"), seg = $("#scatterSeg"), dots = $("#scatterDots");
+  if (!track) return;
+  const slides = [...track.children];
+  let cur = -1;
+  const mark = (i) => {
+    if (i === cur) return;
+    cur = i;
+    seg.querySelectorAll("button").forEach((b) => b.classList.toggle("on", +b.dataset.i === i));
+    [...dots.children].forEach((d, j) => d.classList.toggle("on", j === i));
+    $("#scatterTitle").textContent = slides[i].dataset.title;
+    ls.set("stat:scatter", i);
+  };
+  const go = (i, smooth = true) => { track.scrollTo({ left: i * track.clientWidth, behavior: smooth ? "smooth" : "auto" }); mark(i); };
+  seg.addEventListener("click", (e) => { const b = e.target.closest("button[data-i]"); if (b) go(+b.dataset.i); });
+  let raf = 0;
+  track.addEventListener("scroll", () => {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => mark(Math.max(0, Math.min(slides.length - 1, Math.round(track.scrollLeft / (track.clientWidth || 1))))));
+  }, { passive: true });
+  // 탭 전환·화면 회전 뒤에도 보던 슬라이드 유지
+  new ResizeObserver(() => { if (track.clientWidth) track.scrollLeft = cur * track.clientWidth; }).observe(track);
+  const saved = +ls.get("stat:scatter", 0) || 0;
+  mark(Math.min(saved, slides.length - 1));
 }
 
 /* ============================================================ 화면 상단 알림 */
@@ -1231,6 +1293,8 @@ function bind() {
     } catch (err) { cb.checked = !cb.checked; toast(err.message); }
     cb.disabled = false;
   });
+
+  initScatterSlider();
 
   for (const id of ["fSub", "fList", "fRefund", "fCash", "fMine"]) {
     const el = $("#" + id);

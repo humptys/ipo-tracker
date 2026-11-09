@@ -196,6 +196,15 @@ td { padding: 10px; border-bottom: 1px solid var(--border); white-space: nowrap;
 .entry-legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 .entry-chart circle:hover { r: 7; }
 @media (max-width: 1000px) { .entry-wrap { grid-template-columns: 1fr; } }
+.scatter-head { display: flex; justify-content: space-between; align-items: center; gap: 8px 12px; flex-wrap: wrap; margin-bottom: 4px; }
+.scatter-head h3 { margin: 0; }
+.scatter-card .corr { margin: 0 0 8px; min-height: 1em; }
+.scatter-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-x: contain; }
+.scatter-track::-webkit-scrollbar { display: none; }
+.scatter-slide { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; }
+.scatter-dots { display: flex; justify-content: center; gap: 6px; margin-top: 10px; }
+.scatter-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--border); transition: background .2s, width .2s; }
+.scatter-dots i.on { background: var(--accent); width: 18px; border-radius: 4px; }
 
 /* 내 청약: 계산식 */
 .formula { margin-top: 14px; }
