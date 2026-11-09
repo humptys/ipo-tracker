@@ -198,6 +198,8 @@ td { padding: 10px; border-bottom: 1px solid var(--border); white-space: nowrap;
 @media (max-width: 1000px) { .entry-wrap { grid-template-columns: 1fr; } }
 .scatter-head { display: flex; justify-content: space-between; align-items: center; gap: 8px 12px; flex-wrap: wrap; margin-bottom: 4px; }
 .scatter-head h3 { margin: 0; }
+.scatter-ctrl { display: flex; gap: 8px; flex-wrap: wrap; }
+.entry-legend .yname { font-weight: 600; color: var(--text); }
 .scatter-card .corr { margin: 0 0 8px; min-height: 1em; }
 .scatter-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-x: contain; }
 .scatter-track::-webkit-scrollbar { display: none; }

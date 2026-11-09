@@ -182,8 +182,9 @@ const S = {
   recFilter: "all",
   statYear: "all",
   statPeriod: "month",
+  retBasis: ls.get("stat:basis", "sell"),
 };
-const SCHED_FIELDS = ["sub_start", "sub_end", "refund_date", "listing_date", "offer_price", "inst_competition", "offer_amount", "lockup_pct"];
+const SCHED_FIELDS = ["sub_start", "sub_end", "refund_date", "listing_date", "offer_price", "inst_competition", "offer_amount", "lockup_pct", "open_price"];
 const mineKey = (name) => String(name || "").replace(/\(.*?\)/g, "").replace(/\s+/g, "").toLowerCase();
 const findSchedule = (name) => S.schedule.find((s) => mineKey(s.name) === mineKey(name));
 
@@ -492,6 +493,7 @@ function openEvent(ref) {
       ${row("환불일", s.refund_date)}
       ${row("상장일", s.listing_date)}
       ${row("확정공모가", s.offer_price ? won(s.offer_price) + "원" : "")}
+      ${row("시초가", s.open_price ? `${won(s.open_price)}원 <small class="${cls(s.offer_price ? s.open_price - s.offer_price : 0)}">(${s.offer_price ? pct(s.open_price / s.offer_price - 1, 1) : ""})</small>` : "")}
       ${row("희망공모가", esc(s.price_band))}
       ${row("기관경쟁률", esc(s.inst_competition))}
       ${row("의무보유확약", s.lockup_pct != null ? s.lockup_pct + "%" : "")}
@@ -986,7 +988,7 @@ function renderStats() {
       }).join("") + "</tbody>"
     : `<tbody><tr><td class="muted">기록이 없어요.</td></tr></tbody>`;
 
-  renderEntry(sold);
+  renderEntry(inYear);
 
   const rank = sold.slice().sort(byRet);
   $("#rankTable").innerHTML = rank.length
@@ -1012,7 +1014,7 @@ const SCATTERS = {
     get: (r) => (r.entry_score != null && r.entry_score !== "" && isFinite(+r.entry_score) ? +r.entry_score : null),
     label: "진입가능척도", short: "척도", ka: "척도가", wa: "척도와",
     axis: "진입가능척도 (← 높음 · 낮을수록 좋음 →)",
-    empty: (n) => `매도한 종목 중 진입가능척도가 기록된 게 ${n}건이에요. 2건 이상이면 그래프가 나와요.<br><small>청약 메시지의 '*진입가능척도'가 자동으로 기록되고, 기록 편집에서 직접 넣을 수도 있어요.</small>`,
+    empty: (n, who) => `${who} 중 진입가능척도가 기록된 게 ${n}건이에요. 2건 이상이면 그래프가 나와요.<br><small>청약 메시지의 '*진입가능척도'가 자동으로 기록되고, 기록 편집에서 직접 넣을 수도 있어요.</small>`,
     lowerBetter: true, log: false, fmt: (v) => String(Math.round(v)),
   },
   inst: {
@@ -1020,22 +1022,33 @@ const SCATTERS = {
     get: (r) => { const v = parseRatio(r.inst_competition); return v > 0 ? v : null; },
     label: "기관경쟁률", short: "경쟁률", ka: "경쟁률이", wa: "경쟁률과",
     axis: "기관경쟁률 (로그 눈금 · 오른쪽일수록 높음 →)",
-    empty: (n) => `매도한 종목 중 기관경쟁률을 알 수 있는 게 ${n}건이에요. 2건 이상이면 그래프가 나와요.<br><small>공모주 일정(38)에서 자동으로 채워지고, 기록 편집에서 직접 넣을 수도 있어요.</small>`,
+    empty: (n, who) => `${who} 중 기관경쟁률을 알 수 있는 게 ${n}건이에요. 2건 이상이면 그래프가 나와요.<br><small>공모주 일정(38)에서 자동으로 채워지고, 기록 편집에서 직접 넣을 수도 있어요.</small>`,
     lowerBetter: false, log: true, fmt: fmtComp,
   },
 };
-function renderEntry(sold) {
-  renderScatter(sold, SCATTERS.entry);
-  renderScatter(sold, SCATTERS.inst);
+/** 세로축(수익률) 기준: 내가 판 금액 / 시초가 */
+const RET_BASIS = {
+  sell: { yname: "내 매도 수익률", who: "매도한 종목", ret: (x) => (x.k.sold > 0 && x.k.ret != null ? x.k.ret * 100 : null) },
+  open: {
+    yname: "시초가 수익률", who: "청약한 종목",
+    ret: (x) => (+x.r.open_price > 0 && +x.r.offer_price > 0 ? (x.r.open_price / x.r.offer_price - 1) * 100 : null),
+    hint: "<br><small>시초가는 공모주 일정(38)에서 상장일 이후 자동으로 채워지고, 기록 편집에서 직접 넣을 수도 있어요.</small>",
+  },
+};
+function renderEntry(inYear) {
+  const basis = RET_BASIS[S.retBasis] || RET_BASIS.sell;
+  $("#retBasis").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.b === (S.retBasis || "sell")));
+  renderScatter(inYear, SCATTERS.entry, basis);
+  renderScatter(inYear, SCATTERS.inst, basis);
 }
-function renderScatter(sold, cfg) {
-  const pts = sold
-    .map((x) => ({ raw: cfg.get(x.r), y: x.k.ret == null ? null : x.k.ret * 100, r: x.r, kind: allocKind(x.r) }))
+function renderScatter(list, cfg, basis) {
+  const pts = list
+    .map((x) => ({ raw: cfg.get(x.r), y: basis.ret(x), r: x.r, kind: allocKind(x.r) }))
     .filter((p) => p.raw != null && p.y != null)
     .map((p) => ({ ...p, x: cfg.log ? Math.log10(p.raw) : p.raw }));
   const [chart, table, corr] = cfg.ids.map((id) => $(id));
   if (pts.length < 2) {
-    chart.innerHTML = `<p class="empty">${cfg.empty(pts.length)}</p>`;
+    chart.innerHTML = `<p class="empty">${cfg.empty(pts.length, basis.who)}${basis.hint && list.length ? basis.hint : ""}</p>`;
     table.innerHTML = ""; corr.textContent = "";
     return;
   }
@@ -1049,7 +1062,8 @@ function renderScatter(sold, cfg) {
   const strength = a >= 0.7 ? "뚜렷하게" : a >= 0.4 ? "어느 정도" : a >= 0.2 ? "약하게" : "";
   const dir = cfg.lowerBetter ? "낮을수록" : "높을수록";
   const up = cfg.lowerBetter ? rCoef < 0 : rCoef > 0;
-  const trendTxt = rCoef == null ? "" : a < 0.2 ? `${cfg.wa} 수익률 관계가 거의 없음` : `${cfg.ka} ${dir} 수익률이 ${strength} ${up ? "높음" : "낮음"}`;
+  const yn = basis.yname;
+  const trendTxt = rCoef == null ? "" : a < 0.2 ? `${cfg.wa} ${yn} 관계가 거의 없음` : `${cfg.ka} ${dir} ${yn}이 ${strength} ${up ? "높음" : "낮음"}`;
   corr.textContent = rCoef == null ? "" : `상관계수 ${rCoef.toFixed(2)} · ${trendTxt} (${n}건)`;
 
   // 산점도 (SVG) — 오른쪽이 '좋은 쪽'이 되도록 척도는 X축 반전
@@ -1066,9 +1080,13 @@ function renderScatter(sold, cfg) {
   let xt;
   if (cfg.log) {
     xt = [];
-    for (let e = Math.floor(x0); e <= Math.ceil(x1); e++) for (const m of [1, 2, 5]) { const v = Math.log10(m * 10 ** e); if (v >= x0 && v <= x1) xt.push(v); }
-    if (xt.length > 6) xt = xt.filter((v) => Math.abs(v - Math.round(v)) < 1e-9);
-    if (xt.length < 2) xt = ticks(x0, x1, 3);
+    // 1·2·5 눈금이 3개 미만이면(범위가 좁으면) 1~9 눈금에서 고르게 골라 씀
+    for (const ms of [[1, 2, 5], [1, 2, 3, 4, 5, 6, 7, 8, 9]]) {
+      xt = [];
+      for (let e = Math.floor(x0); e <= Math.ceil(x1); e++) for (const m of ms) { const v = Math.log10(m * 10 ** e); if (v >= x0 && v <= x1) xt.push(v); }
+      if (xt.length >= 3) break;
+    }
+    if (xt.length > 6) { const st = Math.ceil(xt.length / 5); xt = xt.filter((_, i) => i % st === 0); }
   } else xt = ticks(x0, x1, 4);
   const xLabel = (v) => (cfg.log ? fmtComp(10 ** v).replace(":1", "") : String(Math.round(v)));
   let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${cfg.label} 대비 수익률 산점도">`;
@@ -1077,16 +1095,16 @@ function renderScatter(sold, cfg) {
   svg += `<text x="${(L + W - R) / 2}" y="${H - 4}" text-anchor="middle">${cfg.axis}</text>`;
   if (y0 < 0 && y1 > 0) svg += `<line class="zero" x1="${L}" x2="${W - R}" y1="${sy(0)}" y2="${sy(0)}"/>`;
   svg += `<line class="trend" x1="${sx(x0)}" y1="${sy(icpt + slope * x0)}" x2="${sx(x1)}" y2="${sy(icpt + slope * x1)}"/>`;
-  for (const p of pts) svg += `<circle class="k-${p.kind}" cx="${sx(p.x)}" cy="${sy(p.y)}" r="5.5" data-rec="${esc(p.r.id)}"><title>${esc(p.r.name)} · ${ALLOC_LABEL[p.kind]} · ${cfg.short} ${cfg.fmt(p.raw)} · 수익률 ${p.y >= 0 ? "+" : ""}${p.y.toFixed(1)}%</title></circle>`;
+  for (const p of pts) svg += `<circle class="k-${p.kind}" cx="${sx(p.x)}" cy="${sy(p.y)}" r="5.5" data-rec="${esc(p.r.id)}"><title>${esc(p.r.name)} · ${ALLOC_LABEL[p.kind]} · ${cfg.short} ${cfg.fmt(p.raw)} · ${basis.yname} ${p.y >= 0 ? "+" : ""}${p.y.toFixed(1)}%</title></circle>`;
   const present = ["both", "equal", "none"].filter((k) => pts.some((p) => p.kind === k));
-  const legend = `<div class="entry-legend">${present.map((k) => `<span><i class="k-${k}"></i>${ALLOC_LABEL[k]} ${pts.filter((p) => p.kind === k).length}</span>`).join("")}</div>`;
+  const legend = `<div class="entry-legend"><span class="yname">세로축: ${basis.yname}</span>${present.map((k) => `<span><i class="k-${k}"></i>${ALLOC_LABEL[k]} ${pts.filter((p) => p.kind === k).length}</span>`).join("")}</div>`;
   chart.innerHTML = legend + svg + `</svg>`;
 
   // 구간별 (데이터 4분위로 나눔, 적으면 2~3구간)
   const sorted = pts.slice().sort((a, b) => a.raw - b.raw);
   const k = n >= 12 ? 4 : n >= 6 ? 3 : 2;
   const groups = Array.from({ length: k }, (_, i) => sorted.slice(Math.round((i * n) / k), Math.round(((i + 1) * n) / k))).filter((g) => g.length);
-  table.innerHTML = `<thead><tr><th>${cfg.short} 구간</th><th class="r">건수</th><th class="r">평균 수익률</th><th class="r">승률</th></tr></thead><tbody>` +
+  table.innerHTML = `<thead><tr><th>${cfg.short} 구간</th><th class="r">건수</th><th class="r">평균 ${basis === RET_BASIS.open ? "시초가 수익률" : "수익률"}</th><th class="r">${basis === RET_BASIS.open ? "공모가 위" : "승률"}</th></tr></thead><tbody>` +
     groups.map((g) => {
       const avg = g.reduce((a, p) => a + p.y, 0) / g.length;
       const win = g.filter((p) => p.y > 0).length / g.length;
@@ -1109,15 +1127,31 @@ function initScatterSlider() {
     $("#scatterTitle").textContent = slides[i].dataset.title;
     ls.set("stat:scatter", i);
   };
-  const go = (i, smooth = true) => { track.scrollTo({ left: i * track.clientWidth, behavior: smooth ? "smooth" : "auto" }); mark(i); };
+  // 버튼·복원으로 옮길 때는 스크롤 도중 위치로 표시가 바뀌지 않게 잠깐 잠금
+  let lockUntil = 0;
+  const place = (i, smooth) => {
+    if (!track.clientWidth) return;
+    lockUntil = Date.now() + (smooth ? 700 : 150);
+    track.scrollTo({ left: i * track.clientWidth, behavior: smooth ? "smooth" : "instant" });
+  };
+  const go = (i) => { mark(i); place(i, true); };
   seg.addEventListener("click", (e) => { const b = e.target.closest("button[data-i]"); if (b) go(+b.dataset.i); });
   let raf = 0;
   track.addEventListener("scroll", () => {
     cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(() => mark(Math.max(0, Math.min(slides.length - 1, Math.round(track.scrollLeft / (track.clientWidth || 1))))));
+    raf = requestAnimationFrame(() => {
+      if (!track.clientWidth || Date.now() < lockUntil) return;
+      mark(Math.max(0, Math.min(slides.length - 1, Math.round(track.scrollLeft / track.clientWidth))));
+    });
   }, { passive: true });
   // 탭 전환·화면 회전 뒤에도 보던 슬라이드 유지
-  new ResizeObserver(() => { if (track.clientWidth) track.scrollLeft = cur * track.clientWidth; }).observe(track);
+  new ResizeObserver(() => place(cur, false)).observe(track);
+  $("#retBasis").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-b]");
+    if (!b || b.dataset.b === S.retBasis) return;
+    S.retBasis = b.dataset.b; ls.set("stat:basis", S.retBasis);
+    renderStats();
+  });
   const saved = +ls.get("stat:scatter", 0) || 0;
   mark(Math.min(saved, slides.length - 1));
 }

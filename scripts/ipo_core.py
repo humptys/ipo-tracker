@@ -109,6 +109,21 @@ def parse_list(h):
     return out
 
 
+def parse_newlist(h):
+    """신규상장 목록(o=nw) -> {no: {open_price, first_close}} (상장 전 종목은 '-'라 None)"""
+    out = {}
+    for tr in re.findall(r"(?is)<tr[^>]*>(.*?)</tr>", h):
+        m = re.search(r"o=v&(?:amp;)?no=(\d+)", tr)
+        if not m or not re.search(r"\d{4}/\d{2}/\d{2}", tr):
+            continue
+        cells = [strip_tags(c) for c in re.findall(r"(?is)<td[^>]*>(.*?)</td>", tr)]
+        if len(cells) < 9:
+            continue
+        # 기업명, 신규상장일, 현재가, 전일비, 공모가, 공모가대비, 시초가, 시초/공모, 첫날종가
+        out[int(m.group(1))] = dict(open_price=to_num(cells[6]), first_close=to_num(cells[8]))
+    return out
+
+
 def parse_detail(h):
     t = strip_tags(h)
     D = r"(\d{4}\.\d{1,2}\.\d{1,2})"
@@ -160,6 +175,21 @@ def refresh(items, pages=3, force=False):
                     cur[k] = v
             cur["updated_at"] = ts
 
+    # 시초가·첫날종가 (신규상장 목록, 한 페이지 20종목)
+    n_open = 0
+    for p in range(1, (12 if force else 4) + 1):
+        try:
+            rows = parse_newlist(fetch("%s/html/fund/index.htm?o=nw&page=%d" % (SRC, p)))
+        except Exception as e:
+            print("newlist page %d failed: %s" % (p, e), file=sys.stderr)
+            continue
+        if not rows:
+            break
+        for no, d in rows.items():
+            if no in items and d["open_price"]:
+                items[no].update(d)
+                n_open += 1
+
     cutoff = (today - timedelta(days=60)).isoformat()
     stale = (now_kst() - timedelta(hours=5)).isoformat(timespec="seconds")
     need = [
@@ -188,4 +218,4 @@ def refresh(items, pages=3, force=False):
                 if v is not None:
                     cur[k] = v
             cur["detail_at"] = ts
-    return {"list": n_list, "details": n_detail}
+    return {"list": n_list, "details": n_detail, "open": n_open}

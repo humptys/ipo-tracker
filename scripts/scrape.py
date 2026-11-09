@@ -30,7 +30,7 @@ def main():
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=1)
-    print("schedule.json: %d items (list %d, details %d)" % (len(items), result["list"], result["details"]))
+    print("schedule.json: %d items (list %d, details %d, open %d)" % (len(items), result["list"], result["details"], result["open"]))
 
 
 if __name__ == "__main__":
