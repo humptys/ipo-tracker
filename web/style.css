@@ -351,6 +351,11 @@ textarea { width: 100%; border: 1px solid var(--border); border-radius: 10px; pa
 .grid-form label.hl { color: var(--accent); }
 .grid-form input, .sale-form input { border: 1px solid var(--border); border-radius: 8px; padding: 7px 9px; background: var(--surface); color: var(--text); font-weight: 400; font-size: 14px; min-width: 0; width: 100%; }
 .grid-form label.hl input { border-color: var(--accent); }
+/* 같은 줄 입력칸은 안내 문구 유무와 상관없이 아래쪽에 맞춤 */
+.grid-form label > input { margin-top: auto; }
+/* 배정: 균등·비례 한 줄, 합계는 그 아래 전체 폭 */
+.alloc-box { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; padding: 10px 12px 12px; border-radius: 10px; background: var(--accent-soft); }
+.alloc-box label.total { grid-column: 1 / -1; }
 .dep-hint { font-weight: 400; color: var(--accent); }
 .rec-title { display: flex; align-items: center; gap: 10px; }
 .sale-form { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr auto; gap: 8px; }

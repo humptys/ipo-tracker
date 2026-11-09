@@ -245,10 +245,12 @@
       <label>증거금(원) <span id="depHint" class="dep-hint"></span><input name="deposit" inputmode="numeric" data-num></label>
       <label>마통 사용금(원) <span id="loanHint" class="dep-hint"></span><input name="loan_amount" inputmode="numeric" data-num placeholder="마이너스통장에서 쓴 금액"></label>
       <label>마통 금리(연 %)<input name="loan_rate" inputmode="decimal" data-num placeholder="설정값 자동"></label>
-      <label class="hl">균등 배정(주)<input name="alloc_equal" inputmode="numeric" data-num></label>
-      <label class="hl">비례 배정(주)<input name="alloc_prop" inputmode="numeric" data-num></label>
-      <label class="hl">배정 합계(주) <span id="allocHint" class="dep-hint"></span><input name="allocated_qty" inputmode="numeric" data-num></label>
       <label>청약수수료(원) <span id="feeHint" class="dep-hint"></span><input name="sub_fee" inputmode="numeric" data-num></label>
+      <div class="alloc-box">
+        <label class="hl">균등 배정(주)<input name="alloc_equal" inputmode="numeric" data-num></label>
+        <label class="hl">비례 배정(주)<input name="alloc_prop" inputmode="numeric" data-num></label>
+        <label class="hl total">배정 합계(주) <span id="allocHint" class="dep-hint"></span><input name="allocated_qty" inputmode="numeric" data-num></label>
+      </div>
       <label class="span2">메모<input name="memo"></label>
     </form>
 
