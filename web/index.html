@@ -2,16 +2,16 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<!-- 보안: 이 앱 자신의 파일과 GitHub API만 허용. 다른 곳의 스크립트 실행·데이터 전송을 막아 토큰이 새어 나가지 않게 함 -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com; manifest-src 'self'; form-action 'self'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>공모주 기록장</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e5484d'/><path d='M7 21l6-6 4 4 8-9' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 <meta name="theme-color" content="#3b5bdb">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="style.css?v=__BUILD__">
-<script>
-  // 저장된 테마를 화면 그리기 전에 적용 (깜빡임 방지)
-  try { var t = localStorage.getItem("theme"); if (t === '"light"' || t === '"dark"') document.documentElement.dataset.theme = JSON.parse(t); } catch (e) {}
-</script>
+<script src="theme.js?v=__BUILD__"></script>
 </head>
 <body>
 <header class="top">
