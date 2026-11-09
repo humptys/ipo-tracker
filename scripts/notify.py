@@ -35,27 +35,34 @@ def load(path, key):
 
 
 def load_records():
-    repo, token = os.environ.get("RECORDS_REPO"), os.environ.get("RECORDS_TOKEN")
-    if not (repo and token):
+    repos, token = os.environ.get("RECORDS_REPO"), os.environ.get("RECORDS_TOKEN")
+    if not (repos and token):
         print("RECORDS_REPO/RECORDS_TOKEN 없음 -> 로컬 records.json 사용")
         return load(LOCAL_RECORDS, "records")
     path = os.environ.get("RECORDS_PATH") or "ipo-tracker/records.json"
-    url = "https://api.github.com/repos/%s/contents/%s" % (repo, urllib.parse.quote(path))
-    req = urllib.request.Request(url, headers={
-        "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json",
-        "User-Agent": "ipo-tracker",
-    })
-    try:
-        with urllib.request.urlopen(req, timeout=20) as r:
-            j = json.load(r)
-    except urllib.error.HTTPError as e:
-        # 토큰이 그 저장소에 권한이 없어도 GitHub은 404를 줌 -> 알림 없이 조용히 넘어가지 않도록 실패 처리
-        if e.code in (401, 403, 404):
-            sys.exit("기록을 읽지 못했어요 (HTTP %d): %s/%s\n"
-                     "RECORDS_TOKEN이 %s 저장소의 Contents 읽기 권한을 가진 토큰인지, 파일 경로가 맞는지 확인하세요."
-                     % (e.code, repo, path, repo))
-        raise
-    return json.loads(base64.b64decode(j["content"]).decode("utf-8")).get("records", [])
+    # 쉼표로 여러 저장소를 주면 앞에서부터 시도 (저장소 이전 중 토큰이 아직 옛 저장소용일 때 대비)
+    tried = []
+    for repo in [r.strip() for r in repos.split(",") if r.strip()]:
+        url = "https://api.github.com/repos/%s/contents/%s" % (repo, urllib.parse.quote(path))
+        req = urllib.request.Request(url, headers={
+            "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json",
+            "User-Agent": "ipo-tracker",
+        })
+        try:
+            with urllib.request.urlopen(req, timeout=20) as r:
+                j = json.load(r)
+        except urllib.error.HTTPError as e:
+            # 토큰이 그 저장소에 권한이 없어도 GitHub은 404를 줌
+            if e.code in (401, 403, 404):
+                tried.append("%s (HTTP %d)" % (repo, e.code))
+                continue
+            raise
+        if tried:
+            print("::warning::기록을 %s 에서 읽었어요. 못 읽은 곳: %s -> RECORDS_TOKEN을 새 저장소용으로 바꾸세요." % (repo, ", ".join(tried)))
+        print("기록 저장소:", repo)
+        return json.loads(base64.b64decode(j["content"]).decode("utf-8")).get("records", [])
+    # 알림 없이 조용히 넘어가지 않도록 실패 처리
+    sys.exit("기록을 읽지 못했어요: %s\n경로 %s, RECORDS_TOKEN의 Contents 읽기 권한을 확인하세요." % (", ".join(tried), path))
 
 
 def merged_records():
