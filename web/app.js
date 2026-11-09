@@ -1030,8 +1030,9 @@ const SCATTERS = {
 const RET_BASIS = {
   sell: { yname: "내 매도 수익률", who: "매도한 종목", ret: (x) => (x.k.sold > 0 && x.k.ret != null ? x.k.ret * 100 : null) },
   open: {
-    yname: "시초가 수익률", who: "청약한 종목",
-    ret: (x) => (+x.r.open_price > 0 && +x.r.offer_price > 0 ? (x.r.open_price / x.r.offer_price - 1) * 100 : null),
+    yname: "시초가 수익률", who: "매도한 종목",
+    // 내 매도가와 같은 종목끼리 비교하도록 매도한 종목만 사용
+    ret: (x) => (x.k.sold > 0 && +x.r.open_price > 0 && +x.r.offer_price > 0 ? (x.r.open_price / x.r.offer_price - 1) * 100 : null),
     hint: "<br><small>시초가는 공모주 일정(38)에서 상장일 이후 자동으로 채워지고, 기록 편집에서 직접 넣을 수도 있어요.</small>",
   },
 };
@@ -1064,7 +1065,9 @@ function renderScatter(list, cfg, basis) {
   const up = cfg.lowerBetter ? rCoef < 0 : rCoef > 0;
   const yn = basis.yname;
   const trendTxt = rCoef == null ? "" : a < 0.2 ? `${cfg.wa} ${yn} 관계가 거의 없음` : `${cfg.ka} ${dir} ${yn}이 ${strength} ${up ? "높음" : "낮음"}`;
-  corr.textContent = rCoef == null ? "" : `상관계수 ${rCoef.toFixed(2)} · ${trendTxt} (${n}건)`;
+  // 시초가 기준: 매도했지만 시초가를 모르는 종목은 빠지므로 몇 건인지 알려 줌
+  const miss = basis === RET_BASIS.open ? list.filter((x) => x.k.sold > 0 && cfg.get(x.r) != null && basis.ret(x) == null).length : 0;
+  corr.textContent = rCoef == null ? "" : `상관계수 ${rCoef.toFixed(2)} · ${trendTxt} (${n}건${miss ? ` · 시초가 없는 ${miss}건 제외 → 기록 편집에서 입력` : ""})`;
 
   // 산점도 (SVG) — 오른쪽이 '좋은 쪽'이 되도록 척도는 X축 반전
   const W = 600, H = 280, L = 48, R = 14, T = 14, B = 34;
