@@ -135,6 +135,7 @@
             <div class="seg" id="scatterSeg" title="가로축">
               <button data-i="0" class="on">진입가능척도</button>
               <button data-i="1">기관경쟁률</button>
+              <button data-i="2">의무확약</button>
             </div>
             <div class="seg" id="retBasis" title="세로축(수익률 기준)">
               <button data-b="sell" class="on">내 매도가</button>
@@ -157,8 +158,15 @@
               <div class="table-wrap"><table class="mini" id="instTable"></table></div>
             </div>
           </div>
+          <div class="scatter-slide" data-title="의무보유확약 대비 수익률">
+            <p id="lockCorr" class="muted small corr"></p>
+            <div class="entry-wrap">
+              <div id="lockChart" class="entry-chart"></div>
+              <div class="table-wrap"><table class="mini" id="lockTable"></table></div>
+            </div>
+          </div>
         </div>
-        <div class="scatter-dots" id="scatterDots"><i class="on"></i><i></i></div>
+        <div class="scatter-dots" id="scatterDots"><i class="on"></i><i></i><i></i></div>
       </div>
       <div class="card">
         <h3>증권사별 수익률</h3>
@@ -359,7 +367,7 @@
       <ul>
         <li><b>캘린더</b>: 공모주 청약·상장·환불 일정 (38커뮤니케이션에서 6시간마다 자동 갱신), ★는 내가 청약한 종목</li>
         <li><b>내 청약</b>: 기록 목록과 상태, 손익·수익률</li>
-        <li><b>수익 통계</b>: 기간별·증권사별·종목별 수익률, 진입가능척도·기관경쟁률 대비 수익률 (카드를 옆으로 밀어서 전환, 수익률은 내 매도가/시초가 기준 선택)</li>
+        <li><b>수익 통계</b>: 기간별·증권사별·종목별 수익률, 진입가능척도·기관경쟁률·의무보유확약 대비 수익률 (카드를 옆으로 밀어서 전환, 수익률은 내 매도가/시초가 기준 선택)</li>
         <li><b>마통 계산</b>: 마이너스통장으로 증거금을 넣을 때 이자와 손익분기 수익률 미리 계산</li>
       </ul>
     </section>

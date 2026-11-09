@@ -496,7 +496,7 @@ function openEvent(ref) {
       ${row("시초가", s.open_price ? `${won(s.open_price)}원 <small class="${cls(s.offer_price ? s.open_price - s.offer_price : 0)}">(${s.offer_price ? pct(s.open_price / s.offer_price - 1, 1) : ""})</small>` : "")}
       ${row("희망공모가", esc(s.price_band))}
       ${row("기관경쟁률", esc(s.inst_competition))}
-      ${row("의무보유확약", s.lockup_pct != null ? s.lockup_pct + "%" : "")}
+      ${row("의무보유확약", lockupOf(s) != null ? lockupOf(s) + "%" : "")}
       ${row("청약경쟁률", esc(s.competition))}
       ${row("공모금액", s.offer_amount ? won(s.offer_amount * 1e6) + "원" : "")}
       ${row("청약한도", s.sub_limit ? esc(s.sub_limit) + "주" : "")}
@@ -1008,6 +1008,11 @@ function allocKind(r) {
   return "none";
 }
 const fmtComp = (v) => (v >= 100 ? won(Math.round(v)) : v >= 10 ? v.toFixed(0) : v.toFixed(1)) + ":1";
+/** 의무보유확약: 38은 수요예측 전 종목도 0%로 보여 줌 -> 기관경쟁률이 없으면 0%는 '모름'으로 봄 */
+const lockupOf = (r) => {
+  if (r.lockup_pct == null || r.lockup_pct === "" || !isFinite(+r.lockup_pct)) return null;
+  return +r.lockup_pct === 0 && !parseRatio(r.inst_competition) ? null : +r.lockup_pct;
+};
 const SCATTERS = {
   entry: {
     ids: ["#entryChart", "#entryTable", "#entryCorr"],
@@ -1025,6 +1030,16 @@ const SCATTERS = {
     empty: (n, who) => `${who} 중 기관경쟁률을 알 수 있는 게 ${n}건이에요. 2건 이상이면 그래프가 나와요.<br><small>공모주 일정(38)에서 자동으로 채워지고, 기록 편집에서 직접 넣을 수도 있어요.</small>`,
     lowerBetter: false, log: true, fmt: fmtComp,
   },
+  lockup: {
+    ids: ["#lockChart", "#lockTable", "#lockCorr"],
+    get: lockupOf,
+    label: "의무보유확약", short: "확약", ka: "확약 비율이", wa: "확약 비율과",
+    axis: "의무보유확약 비율 (%, 오른쪽일수록 높음 →)",
+    empty: (n, who) => `${who} 중 의무보유확약을 알 수 있는 게 ${n}건이에요. 2건 이상이면 그래프가 나와요.<br><small>공모주 일정(38)에서 수요예측 뒤 자동으로 채워지고, 기록 편집에서 직접 넣을 수도 있어요.</small>`,
+    lowerBetter: false, log: false, fmt: (v) => (Math.round(v * 10) / 10) + "%",
+    // 0%가 많아 4분위로 나누면 '0~0' 구간이 겹침 -> 고정 구간 사용
+    bins: [[0, 0, "0%"], [0, 5, "0~5%"], [5, 15, "5~15%"], [15, Infinity, "15% 이상"]],
+  },
 };
 /** 세로축(수익률) 기준: 내가 판 금액 / 시초가 */
 const RET_BASIS = {
@@ -1041,6 +1056,7 @@ function renderEntry(inYear) {
   $("#retBasis").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.b === (S.retBasis || "sell")));
   renderScatter(inYear, SCATTERS.entry, basis);
   renderScatter(inYear, SCATTERS.inst, basis);
+  renderScatter(inYear, SCATTERS.lockup, basis);
 }
 function renderScatter(list, cfg, basis) {
   const pts = list
@@ -1106,12 +1122,14 @@ function renderScatter(list, cfg, basis) {
   // 구간별 (데이터 4분위로 나눔, 적으면 2~3구간)
   const sorted = pts.slice().sort((a, b) => a.raw - b.raw);
   const k = n >= 12 ? 4 : n >= 6 ? 3 : 2;
-  const groups = Array.from({ length: k }, (_, i) => sorted.slice(Math.round((i * n) / k), Math.round(((i + 1) * n) / k))).filter((g) => g.length);
+  const groups = cfg.bins
+    ? cfg.bins.map(([lo, hi, name]) => Object.assign(sorted.filter((p) => (lo === hi ? p.raw === lo : p.raw > lo && p.raw <= hi)), { name })).filter((g) => g.length)
+    : Array.from({ length: k }, (_, i) => sorted.slice(Math.round((i * n) / k), Math.round(((i + 1) * n) / k))).filter((g) => g.length);
   table.innerHTML = `<thead><tr><th>${cfg.short} 구간</th><th class="r">건수</th><th class="r">평균 ${basis === RET_BASIS.open ? "시초가 수익률" : "수익률"}</th><th class="r">${basis === RET_BASIS.open ? "공모가 위" : "승률"}</th></tr></thead><tbody>` +
     groups.map((g) => {
       const avg = g.reduce((a, p) => a + p.y, 0) / g.length;
       const win = g.filter((p) => p.y > 0).length / g.length;
-      return `<tr><td>${cfg.fmt(g[0].raw)} ~ ${cfg.fmt(g[g.length - 1].raw)}</td><td class="r">${g.length}</td>
+      return `<tr><td>${g.name || `${cfg.fmt(g[0].raw)} ~ ${cfg.fmt(g[g.length - 1].raw)}`}</td><td class="r">${g.length}</td>
         <td class="r ${cls(avg)}"><b>${avg >= 0 ? "+" : ""}${avg.toFixed(1)}%</b></td><td class="r">${Math.round(win * 100)}%</td></tr>`;
     }).join("") + "</tbody>";
 }
