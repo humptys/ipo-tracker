@@ -58,6 +58,7 @@
         </div>
         <div class="cal-grid" id="calGrid"></div>
         <div class="cal-foot">
+          <button type="button" class="ghost sm" id="btnIcs">📅 내 캘린더로 내보내기</button>
           <span id="lastRefresh" class="muted"></span>
           <a class="muted" href="https://www.38.co.kr/html/fund/index.htm?o=k" target="_blank" rel="noopener">출처: 38커뮤니케이션 ↗</a>
         </div>
@@ -210,6 +211,51 @@
     <div class="dlg-actions">
       <button type="button" class="ghost" data-close>취소</button>
       <button type="submit" class="primary" id="btnAddSave">기록하기</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 캘린더 내보내기 -->
+<dialog id="dlgIcs" class="dlg">
+  <form id="formIcs" class="dlg-body ics">
+    <h2>📅 내 캘린더로 내보내기</h2>
+    <p class="muted small">일정을 캘린더 파일(.ics)로 저장해서 삼성캘린더·네이버캘린더에 넣어요. 누른 시점의 일정이라, 일정이 바뀌면 다시 내보내 주세요.</p>
+    <fieldset>
+      <legend>일정 종류</legend>
+      <label><input type="checkbox" name="kSub"> 청약</label>
+      <label><input type="checkbox" name="kList"> 상장</label>
+      <label><input type="checkbox" name="kRefund"> 환불</label>
+      <label><input type="checkbox" name="kCash"> 출금</label>
+    </fieldset>
+    <fieldset class="ics-pick">
+      <legend>옮길 종목</legend>
+      <div class="ics-quick">
+        <button type="button" class="ghost sm" id="icsPickMine">★ 내 청약만</button>
+        <button type="button" class="ghost sm" id="icsPickAll">전체 선택</button>
+        <button type="button" class="ghost sm" id="icsPickNone">모두 해제</button>
+      </div>
+      <div class="ics-list" id="icsList"></div>
+    </fieldset>
+    <fieldset>
+      <legend>어디에 넣을까요?</legend>
+      <label><input type="radio" name="target" value="samsung" checked> 삼성캘린더</label>
+      <label><input type="radio" name="target" value="naver"> 네이버캘린더</label>
+    </fieldset>
+    <ol class="ics-guide" data-guide="samsung">
+      <li>아래 <b>파일 저장</b>을 눌러요.</li>
+      <li>화면 아래 다운로드 알림의 <b>열기</b>를 누르거나, <b>내 파일 → 다운로드</b>에서 파일을 눌러요.</li>
+      <li>앱 선택이 나오면 <b>캘린더</b>를 고르고, 저장할 캘린더(계정)를 정한 뒤 <b>저장</b>해요.</li>
+    </ol>
+    <ol class="ics-guide hidden" data-guide="naver">
+      <li>아래 <b>파일 저장</b>을 눌러요. (PC에서 하는 게 편해요)</li>
+      <li>PC에서 <b>네이버 캘린더</b>(calendar.naver.com)를 열어요.</li>
+      <li><b>환경설정(⚙) → 가져오기/내보내기</b>에서 저장한 <b>.ics 파일</b>을 선택해 가져와요.</li>
+      <li>네이버캘린더 앱에서는 파일을 직접 못 넣어요. PC에서 넣으면 앱에도 보여요.</li>
+    </ol>
+    <p id="icsCount" class="ics-count"></p>
+    <div class="dlg-actions">
+      <button type="button" class="ghost" data-close>닫기</button>
+      <button type="submit" class="primary" id="btnIcsSave">파일 저장</button>
     </div>
   </form>
 </dialog>

@@ -391,17 +391,18 @@ function renderConn() {
 }
 
 /* ============================================================ 캘린더 */
-function calendarEvents() {
+/** o.mine / o.kinds 를 주면 화면 체크박스 대신 그 값으로 거름 (캘린더 내보내기용) */
+function calendarEvents(o = {}) {
   const ev = [];
   const seen = new Set();
-  const fMine = $("#fMine").checked;
-  const add = (date, kind, name, ref, mine, done) => { if (date) ev.push({ date, kind, name, ref, mine, done }); };
+  const fMine = o.mine ?? $("#fMine").checked;
+  const add = (date, kind, name, ref, mine, done, start) => { if (date) ev.push({ date, kind, name, ref, mine, done, start }); };
   // 매도대금 출금 가능일
   for (const r of S.records) for (const s of r.sales || []) {
     add(withdrawDate(s), "cash", `${r.name} ${won(saleCash(s))}원`, { rec: r.id }, true, isTransferred(s));
   }
   // 청약은 기간(보통 이틀) 중 마지막 날(마감일)에만 한 번 표시
-  const addSub = (s, e, name, ref, mine) => { if (e || s) add(e || s, "sub", name, ref, mine); };
+  const addSub = (s, e, name, ref, mine) => { if (e || s) add(e || s, "sub", name, ref, mine, false, s || e); };
   for (const s of S.schedule) {
     const rec = myRecordFor(s);
     if (rec) seen.add(rec.id);
@@ -418,7 +419,7 @@ function calendarEvents() {
     add(r.listing_date, "list", r.name, ref, true);
     add(r.refund_date, "refund", r.name, ref, true);
   }
-  const on = { sub: $("#fSub").checked, list: $("#fList").checked, refund: $("#fRefund").checked, cash: $("#fCash").checked };
+  const on = o.kinds || { sub: $("#fSub").checked, list: $("#fList").checked, refund: $("#fRefund").checked, cash: $("#fCash").checked };
   const order = { cash: 0, list: 1, sub: 2, refund: 3 };
   return ev.filter((e) => on[e.kind]).sort((a, b) => (b.mine - a.mine) || (order[a.kind] - order[b.kind]) || a.name.localeCompare(b.name));
 }
@@ -904,6 +905,121 @@ function formValues(form) {
   return out;
 }
 
+/* ============================================================ 캘린더 내보내기 (.ics) */
+const ICS_KIND = { sub: "청약", list: "상장", refund: "환불", cash: "출금" };
+const icsKey = (e) => e.ref.rec || "s" + e.ref.sch;
+const icsPicked = new Set(); // 내보낼 종목 (icsKey)
+/** 내보낼 수 있는 일정: 오늘 이후, 선택한 종류. 이체 끝난 출금은 제외 */
+function exportCandidates() {
+  const f = $("#formIcs");
+  const kinds = { sub: f.kSub.checked, list: f.kList.checked, refund: f.kRefund.checked, cash: f.kCash.checked };
+  const t = todayISO();
+  return calendarEvents({ mine: false, kinds })
+    .filter((e) => e.date >= t && !(e.kind === "cash" && e.done))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+const exportEvents = () => exportCandidates().filter((e) => icsPicked.has(icsKey(e)));
+function buildIcs(events) {
+  const ymd = (s) => s.replace(/-/g, "");
+  const next = (s) => { const d = parseISO(s); d.setDate(d.getDate() + 1); return ymd(iso(d)); };
+  const escT = (s) => String(s ?? "").replace(/\\/g, "\\\\").replace(/([,;])/g, "\\$1").replace(/\r?\n/g, "\\n");
+  // 한 줄 75바이트 제한: 글자 단위로 끊어 이어 쓰기 (한글 1자 = 3바이트)
+  const enc = new TextEncoder();
+  const fold = (line) => {
+    const out = []; let cur = "", bytes = 0;
+    for (const ch of line) {
+      const n = enc.encode(ch).length;
+      if (bytes + n > 73) { out.push(cur); cur = " "; bytes = 1; }
+      cur += ch; bytes += n;
+    }
+    out.push(cur);
+    return out.join("\r\n");
+  };
+  const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
+  const L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//ipo-tracker//KO", "CALSCALE:GREGORIAN", "METHOD:PUBLISH", "X-WR-CALNAME:공모주 기록장"];
+  for (const e of events) {
+    const rec = e.ref.rec ? S.records.find((r) => r.id === e.ref.rec) : null;
+    const s = rec ? { ...(findSchedule(rec.name) || {}), ...rec } : S.schedule.find((x) => x.no === e.ref.sch) || {};
+    const broker = (rec && rec.broker) || s.brokers || "";
+    const start = e.kind === "sub" && e.start && e.start <= e.date ? e.start : e.date;
+    const title = e.kind === "sub" ? `청약 ${e.name}${start !== e.date ? ` (~${md(e.date)} 마감)` : " 마감"}`
+      : e.kind === "cash" ? `출금 가능 ${e.name}` : `${ICS_KIND[e.kind]} ${e.name}`;
+    const desc = [
+      broker && `증권사: ${broker}`,
+      s.offer_price && `공모가: ${won(s.offer_price)}원`,
+      s.inst_competition && `기관경쟁률: ${s.inst_competition}`,
+      lockupOf(s) != null && `의무보유확약: ${lockupOf(s)}%`,
+      e.kind === "refund" && "환불일 — 배정 수량을 기록하세요",
+      rec && rec.allocated_qty > 0 && e.kind === "list" && `배정: ${won(rec.allocated_qty)}주`,
+      location.origin + location.pathname,
+    ].filter(Boolean).join("\n");
+    // UID를 종목·종류로 고정 -> 같은 일정을 다시 가져올 때 캘린더가 중복 대신 갱신할 수 있게
+    const key = e.ref.rec || "s" + e.ref.sch;
+    const uid = `${e.kind}-${key}${e.kind === "cash" ? "-" + ymd(e.date) : ""}@ipo-tracker`;
+    L.push("BEGIN:VEVENT", `UID:${uid}`, `DTSTAMP:${stamp}`, `DTSTART;VALUE=DATE:${ymd(start)}`, `DTEND;VALUE=DATE:${next(e.date)}`,
+      `SUMMARY:${escT((e.mine ? "★ " : "") + title)}`, `DESCRIPTION:${escT(desc)}`, "TRANSP:TRANSPARENT");
+    // 상장일 아침 08:30 알림 (캘린더 앱이 지원하는 경우)
+    if (e.kind === "list") L.push("BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${escT(title)}`, "TRIGGER:PT8H30M", "END:VALARM");
+    L.push("END:VEVENT");
+  }
+  L.push("END:VCALENDAR");
+  return L.map(fold).join("\r\n") + "\r\n";
+}
+function initIcsExport() {
+  const dlg = $("#dlgIcs"), f = $("#formIcs"), list = $("#icsList");
+  const sync = () => {
+    // 종목별로 묶어 체크 목록 표시 (내 청약 먼저, 그다음 가까운 날짜 순)
+    const groups = new Map();
+    for (const e of exportCandidates()) {
+      const k = icsKey(e);
+      if (!groups.has(k)) groups.set(k, { k, name: e.kind === "cash" ? e.name.replace(/ [\d,]+원$/, "") : e.name, mine: e.mine, evs: [] });
+      const g = groups.get(k);
+      g.evs.push(e);
+      if (e.kind !== "cash") g.name = e.name;
+    }
+    const rows = [...groups.values()].sort((a, b) => (b.mine - a.mine) || a.evs[0].date.localeCompare(b.evs[0].date));
+    list.innerHTML = rows.length
+      ? rows.map((g) => `<label><input type="checkbox" data-k="${esc(g.k)}" ${icsPicked.has(g.k) ? "checked" : ""}>
+          <span class="nm">${g.mine ? "★ " : ""}${esc(g.name)}</span>
+          <small>${g.evs.map((e) => `${ICS_KIND[e.kind]} ${e.kind === "sub" && e.start && e.start < e.date ? md(e.start) + "~" : ""}${md(e.date)}`).join(" · ")}</small></label>`).join("")
+      : `<p class="empty">오늘 이후 일정이 없어요.</p>`;
+    const evs = exportEvents();
+    const stocks = new Set(evs.map(icsKey)).size;
+    $("#icsCount").textContent = evs.length ? `${stocks}종목 · 일정 ${evs.length}건을 내보내요` : "내보낼 종목을 골라 주세요.";
+    $("#btnIcsSave").disabled = !evs.length;
+    const target = f.target.value;
+    dlg.querySelectorAll("[data-guide]").forEach((el) => el.classList.toggle("hidden", el.dataset.guide !== target));
+    ls.set("ics", { target });
+  };
+  const pick = (fn) => { icsPicked.clear(); for (const e of exportCandidates()) if (fn(e)) icsPicked.add(icsKey(e)); sync(); };
+  $("#btnIcs").onclick = () => {
+    f.target.value = ls.get("ics", {}).target || "samsung";
+    for (const [k, id] of [["kSub", "fSub"], ["kList", "fList"], ["kRefund", "fRefund"], ["kCash", "fCash"]]) f[k].checked = $("#" + id).checked;
+    pick((e) => e.mine); // 처음에는 내 청약 종목만 선택
+    dlg.showModal();
+  };
+  $("#icsPickMine").onclick = () => pick((e) => e.mine);
+  $("#icsPickAll").onclick = () => pick(() => true);
+  $("#icsPickNone").onclick = () => pick(() => false);
+  f.addEventListener("change", (e) => {
+    const k = e.target.dataset.k;
+    if (k) e.target.checked ? icsPicked.add(k) : icsPicked.delete(k);
+    sync();
+  });
+  f.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const evs = exportEvents();
+    if (!evs.length) return;
+    const blob = new Blob([buildIcs(evs)], { type: "text/calendar;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `ipo-calendar-${todayISO().replace(/-/g, "")}.ics`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+    toast(`일정 ${evs.length}건을 파일로 저장했어요. 내려받은 파일을 열어 주세요.`);
+  });
+}
+
 /* ============================================================ 통계 */
 function periodKey(d, p) {
   const y = d.slice(0, 4), m = +d.slice(5, 7);
@@ -1359,6 +1475,7 @@ function bind() {
   });
 
   initScatterSlider();
+  initIcsExport();
 
   for (const id of ["fSub", "fList", "fRefund", "fCash", "fMine"]) {
     const el = $("#" + id);
