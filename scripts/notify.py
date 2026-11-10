@@ -102,7 +102,19 @@ def send(title, message, tags="chart_with_upwards_trend", priority=4):
         print("sent:", r.status, title)
 
 
+def check_secrets():
+    """GitHub Actions에서 비밀값이 비어 있으면 '성공'으로 조용히 끝나지 않게 실패 처리"""
+    if not os.environ.get("GITHUB_ACTIONS"):
+        return
+    missing = [k for k in ("NTFY_TOPIC", "RECORDS_TOKEN") if not os.environ.get(k)]
+    if os.environ.get("TEST") and "RECORDS_TOKEN" in missing:
+        missing.remove("RECORDS_TOKEN")  # 테스트 알림은 기록을 안 읽음
+    if missing:
+        sys.exit("비밀값이 비어 있어요: %s\n저장소 Settings → Secrets and variables → Actions 에 등록하세요." % ", ".join(missing))
+
+
 def main():
+    check_secrets()
     if os.environ.get("TEST"):
         return send("📈 공모주 알림 테스트", "알림이 정상적으로 도착했어요.")
     today = core.now_kst().date()
