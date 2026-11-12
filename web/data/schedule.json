@@ -1,5 +1,5 @@
 {
- "last_refresh": "2026-11-12T22:13:03+09:00",
+ "last_refresh": "2026-11-13T03:57:14+09:00",
  "items": [
   {
    "no": 2263,
@@ -10,7 +10,7 @@
    "price_band": "2,000~2,000",
    "competition": "593.86:1",
    "brokers": "미래에셋증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 3900,
    "first_close": 2210
   },
@@ -23,7 +23,7 @@
    "price_band": "6,700~7,600",
    "competition": "3224.76:1",
    "brokers": "대신증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 22900,
    "first_close": 19210
   },
@@ -36,7 +36,7 @@
    "price_band": "2,000~2,000",
    "competition": "421.20:1",
    "brokers": "하나증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 3000,
    "first_close": 1977
   },
@@ -49,7 +49,7 @@
    "price_band": "2,000~2,000",
    "competition": "914.50:1",
    "brokers": "미래에셋증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 5050,
    "first_close": 1991
   },
@@ -62,7 +62,7 @@
    "price_band": "44,000~55,000",
    "competition": "390:1",
    "brokers": "삼성증권,미래에셋증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 66000,
    "first_close": 49600
   },
@@ -75,7 +75,7 @@
    "price_band": "21,000~24,000",
    "competition": "967.60:1",
    "brokers": "삼성증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 47170,
    "first_close": 27650
   },
@@ -88,7 +88,7 @@
    "price_band": "2,000~2,000",
    "competition": "1870.38:1",
    "brokers": "삼성증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 4890,
    "first_close": 7200
   },
@@ -101,7 +101,7 @@
    "price_band": "8,500~10,000",
    "competition": "1354.4:1",
    "brokers": "NH투자증권,미래에셋증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 21050,
    "first_close": 34850
   },
@@ -114,7 +114,7 @@
    "price_band": "8,300~9,500",
    "competition": "134.59:1",
    "brokers": "NH투자증권,삼성증권,신한투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 9000,
    "first_close": 8330
   },
@@ -127,7 +127,7 @@
    "price_band": "10,100~11,500",
    "competition": "2711.06:1",
    "brokers": "미래에셋증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 46000,
    "first_close": 46000
   },
@@ -140,7 +140,7 @@
    "price_band": "7,000~8,500",
    "competition": "1960.87:1",
    "brokers": "한국투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 30650,
    "first_close": 34000
   },
@@ -153,7 +153,7 @@
    "price_band": "16,000~20,000",
    "competition": "1899.29:1",
    "brokers": "한국투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 68100,
    "first_close": 50600
   },
@@ -166,7 +166,7 @@
    "price_band": "19,000~26,000",
    "competition": "1806:1",
    "brokers": "한국투자증권,신한투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 104000,
    "first_close": 104000
   },
@@ -179,7 +179,7 @@
    "price_band": "16,700~21,600",
    "competition": "2428.25:1",
    "brokers": "신한투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 66000,
    "first_close": 39000
   },
@@ -192,7 +192,7 @@
    "price_band": "17,000~19,000",
    "competition": "1673.04:1",
    "brokers": "한국투자증권,대신증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 37100,
    "first_close": 27200
   },
@@ -205,7 +205,7 @@
    "price_band": "2,000~2,000",
    "competition": "569.27:1",
    "brokers": "NH투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 3460,
    "first_close": 2660
   },
@@ -218,7 +218,7 @@
    "price_band": "9,000~11,000",
    "competition": "2097.68:1",
    "brokers": "한국투자증권,KB증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 37600,
    "first_close": 18450
   },
@@ -231,7 +231,7 @@
    "price_band": "2,000~2,000",
    "competition": "1403.74:1",
    "brokers": "신한투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 5760,
    "first_close": 2045
   },
@@ -244,7 +244,7 @@
    "price_band": "12,100~16,600",
    "competition": "1913:1",
    "brokers": "NH투자증권,유진투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 39150,
    "first_close": 35250
   },
@@ -257,7 +257,7 @@
    "price_band": "2,000~2,000",
    "competition": "747:1",
    "brokers": "교보증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 4900,
    "first_close": 2020
   },
@@ -270,7 +270,7 @@
    "price_band": "2,000~2,000",
    "competition": "1727.59:1",
    "brokers": "키움증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 4790,
    "first_close": 2735
   },
@@ -283,7 +283,7 @@
    "price_band": "12,300~15,300",
    "competition": "302:1",
    "brokers": "KB증권,삼성증권,대신증권,하나증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 15250,
    "first_close": 22550
   },
@@ -296,7 +296,7 @@
    "price_band": "2,000~2,000",
    "competition": "1601.36:1",
    "brokers": "신한투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 6070,
    "first_close": 2355
   },
@@ -309,7 +309,7 @@
    "price_band": "5,300~6,000",
    "competition": "2013:1",
    "brokers": "유진투자증권,NH투자증권,유안타증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 23500,
    "first_close": 24000
   },
@@ -322,7 +322,7 @@
    "price_band": "4,100~5,000",
    "competition": "3169.86:1",
    "brokers": "NH투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 20000,
    "first_close": 20000
   },
@@ -335,7 +335,7 @@
    "price_band": "12,500~15,000",
    "competition": "2807.8:1",
    "brokers": "미래에셋증권,현대차증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 60000,
    "first_close": 60000
   },
@@ -348,7 +348,7 @@
    "price_band": "2,000~2,000",
    "competition": "1468.88:1",
    "brokers": "대신증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 6200,
    "first_close": 1984
   },
@@ -361,7 +361,7 @@
    "price_band": "19,000~21,500",
    "competition": "1194.94:1",
    "brokers": "NH투자증권,미래에셋증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 32000,
    "first_close": 13730
   },
@@ -374,7 +374,7 @@
    "price_band": "2,000~2,000",
    "competition": "1388.66:1",
    "brokers": "메리츠증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 3905,
    "first_close": 1970
   },
@@ -387,7 +387,7 @@
    "price_band": "12,000~14,000",
    "competition": "45.83:1",
    "brokers": "KB증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 11020,
    "first_close": 7200
   },
@@ -400,7 +400,7 @@
    "price_band": "10,500~12,500",
    "competition": "2,783.89:1",
    "brokers": "삼성증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 35350,
    "first_close": 17530
   },
@@ -413,7 +413,7 @@
    "price_band": "2,000~2,000",
    "competition": "1274.77:1",
    "brokers": "한국투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 4090,
    "first_close": 1941
   },
@@ -426,7 +426,7 @@
    "price_band": "7,000~8,000",
    "competition": "3304.76:1",
    "brokers": "미래에셋증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 22250,
    "first_close": 10080
   },
@@ -439,7 +439,7 @@
    "price_band": "7,500~10,000",
    "competition": "1510.57:1",
    "brokers": "KB증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 16560,
    "first_close": 9850
   },
@@ -452,7 +452,7 @@
    "price_band": "17,800~20,700",
    "competition": "1706.71:1",
    "brokers": "KB증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 30750,
    "first_close": 22000
   },
@@ -465,7 +465,7 @@
    "price_band": "18,500~21,500",
    "competition": "666.78:1",
    "brokers": "KB증권,IBK투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 21500,
    "first_close": 14790
   },
@@ -478,7 +478,7 @@
    "price_band": "12,000~14,500",
    "competition": "3.09:1",
    "brokers": "삼성증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 10960,
    "first_close": 17990
   },
@@ -491,7 +491,7 @@
    "price_band": "5,000~7,000",
    "competition": "10.29:1",
    "brokers": "한국투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 6000,
    "first_close": 5140
   },
@@ -504,7 +504,7 @@
    "price_band": "9,000~11,000",
    "competition": "1079.55:1",
    "brokers": "IBK투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 21000,
    "first_close": 15380
   },
@@ -517,7 +517,7 @@
    "price_band": "24,800~28,400",
    "competition": "5.53:1",
    "brokers": "미래에셋증권,삼성증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 28000,
    "first_close": 18580
   },
@@ -530,7 +530,7 @@
    "price_band": "30,000~41,200",
    "competition": "522.99:1",
    "brokers": "삼성증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 40500,
    "first_close": 28650
   },
@@ -543,7 +543,7 @@
    "price_band": "23,000~28,000",
    "competition": "25.73:1",
    "brokers": "DB증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 20500,
    "first_close": 13930
   },
@@ -556,7 +556,7 @@
    "price_band": "13,000~16,000",
    "competition": "2.85:1",
    "brokers": "한국투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 8500,
    "first_close": 23500
   },
@@ -569,7 +569,7 @@
    "price_band": "2,000~2,000",
    "competition": "356.99:1",
    "brokers": "NH투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "open_price": 4000,
    "first_close": 2075
   },
@@ -582,7 +582,7 @@
    "price_band": "13,800~15,800",
    "competition": "1047.78:1",
    "brokers": "대신증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-09-02",
    "forecast_end": "2026-09-08",
    "refund_date": "2026-09-15",
@@ -605,7 +605,7 @@
    "price_band": "2,000~2,000",
    "competition": "397.33:1",
    "brokers": "KB증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-09-04",
    "forecast_end": "2026-09-07",
    "refund_date": "2026-09-15",
@@ -628,7 +628,7 @@
    "price_band": "2,000~2,000",
    "competition": "494.62:1",
    "brokers": "한국투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-09-07",
    "forecast_end": "2026-09-08",
    "refund_date": "2026-09-15",
@@ -651,7 +651,7 @@
    "price_band": "10,000~12,000",
    "competition": "1477.65:1",
    "brokers": "대신증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-09-04",
    "forecast_end": "2026-09-10",
    "refund_date": "2026-09-17",
@@ -674,7 +674,7 @@
    "price_band": "15,000~18,000",
    "competition": "1375.34:1",
    "brokers": "유진투자증권,미래에셋증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-09-07",
    "forecast_end": "2026-09-11",
    "refund_date": "2026-09-18",
@@ -696,7 +696,7 @@
    "price_band": "12,400~14,600",
    "competition": "332.82:1",
    "brokers": "대신증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-09-08",
    "forecast_end": "2026-09-14",
    "refund_date": "2026-09-21",
@@ -720,7 +720,7 @@
    "price_band": "13,000~15,000",
    "competition": "57.15:1",
    "brokers": "한국투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-09-07",
    "forecast_end": "2026-09-11",
    "refund_date": "2026-09-21",
@@ -744,7 +744,7 @@
    "price_band": "16,500~19,500",
    "competition": "1676.26:1",
    "brokers": "IBK투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-09-09",
    "forecast_end": "2026-09-15",
    "refund_date": "2026-09-22",
@@ -768,7 +768,7 @@
    "price_band": "10,700~12,300",
    "competition": "1741.48:1",
    "brokers": "대신증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-09-16",
    "forecast_end": "2026-09-22",
    "refund_date": "2026-10-07",
@@ -792,7 +792,7 @@
    "price_band": "19,500~23,500",
    "competition": "685:1",
    "brokers": "하나증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-09-16",
    "forecast_end": "2026-09-22",
    "refund_date": "2026-10-08",
@@ -816,7 +816,7 @@
    "price_band": "70,400~90,500",
    "competition": "408:1",
    "brokers": "미래에셋증권,삼성증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-09-23",
    "forecast_end": "2026-10-01",
    "refund_date": "2026-10-13",
@@ -838,7 +838,7 @@
    "price_band": "6,800~7,800",
    "competition": "1538.51:1",
    "brokers": "KB증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-09-28",
    "forecast_end": "2026-10-02",
    "refund_date": "2026-10-15",
@@ -861,7 +861,7 @@
    "price_band": "17,000~18,500",
    "competition": "986.99:1",
    "brokers": "대신증권,유진증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-01",
    "forecast_end": "2026-10-08",
    "refund_date": "2026-10-16",
@@ -883,7 +883,7 @@
    "price_band": "2,000~2,000",
    "competition": "656:1",
    "brokers": "SK증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-12",
    "forecast_end": "2026-10-13",
    "refund_date": "2026-10-20",
@@ -905,7 +905,7 @@
    "price_band": "12,600~15,300",
    "competition": "1253.39:1",
    "brokers": "신한투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-07",
    "forecast_end": "2026-10-14",
    "refund_date": "2026-10-23",
@@ -928,7 +928,7 @@
    "price_band": "15,000~18,000",
    "competition": "6.92:1",
    "brokers": "삼성증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-12",
    "forecast_end": "2026-10-16",
    "refund_date": "2026-10-23",
@@ -952,7 +952,7 @@
    "price_band": "2,000~2,000",
    "competition": "185.75:1",
    "brokers": "한화투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-14",
    "forecast_end": "2026-10-15",
    "refund_date": "2026-10-23",
@@ -975,7 +975,7 @@
    "price_band": "7,600~9,000",
    "competition": "1410.87:1",
    "brokers": "미래에셋증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-12",
    "forecast_end": "2026-10-16",
    "refund_date": "2026-10-26",
@@ -999,7 +999,7 @@
    "price_band": "10,600~12,400",
    "competition": "28.95:1",
    "brokers": "대신증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-14",
    "forecast_end": "2026-10-20",
    "refund_date": "2026-10-27",
@@ -1023,7 +1023,7 @@
    "price_band": "14,000~17,000",
    "competition": "684.73:1",
    "brokers": "한국투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-13",
    "forecast_end": "2026-10-19",
    "refund_date": "2026-10-27",
@@ -1047,7 +1047,7 @@
    "price_band": "19,000~22,000",
    "competition": "3.55:1",
    "brokers": "NH투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-13",
    "forecast_end": "2026-10-19",
    "refund_date": "2026-10-27",
@@ -1070,7 +1070,7 @@
    "price_band": "2,000~2,000",
    "competition": "1112.73:1",
    "brokers": "아이엠증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-19",
    "forecast_end": "2026-10-20",
    "refund_date": "2026-10-29",
@@ -1093,7 +1093,7 @@
    "price_band": "16,400~20,200",
    "competition": "19.27:1",
    "brokers": "미래에셋증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-22",
    "forecast_end": "2026-10-28",
    "refund_date": "2026-11-05",
@@ -1119,7 +1119,7 @@
    "price_band": "23,000~26,500",
    "competition": "1219.37:1",
    "brokers": "삼성증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-22",
    "forecast_end": "2026-10-28",
    "refund_date": "2026-11-05",
@@ -1141,10 +1141,10 @@
    "sub_start": "2026-11-03",
    "sub_end": "2026-11-04",
    "offer_price": 8000,
-   "price_band": "10,500 ~ 13,000",
+   "price_band": "10,500~13,000",
    "competition": "13.26:1",
    "brokers": "한국투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-22",
    "forecast_end": "2026-10-28",
    "refund_date": "2026-11-06",
@@ -1170,7 +1170,7 @@
    "price_band": "9,400 ~ 11,000",
    "competition": "1342.66:1",
    "brokers": "대신증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-27",
    "forecast_end": "2026-11-02",
    "refund_date": "2026-11-09",
@@ -1181,7 +1181,7 @@
    "market": "코스닥",
    "code": "345290",
    "sub_limit": "19,000~23,000",
-   "detail_at": "2026-11-12T22:12:32+09:00",
+   "detail_at": "2026-11-13T03:56:34+09:00",
    "deposit_rate": 50,
    "prop_competition": "2685:1"
   },
@@ -1194,7 +1194,7 @@
    "price_band": "10,000 ~ 12,000",
    "competition": "1343.32:1",
    "brokers": "한국투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-21",
    "forecast_end": "2026-10-27",
    "refund_date": "2026-11-10",
@@ -1205,7 +1205,7 @@
    "market": "코스닥",
    "code": "493260",
    "sub_limit": "9,000~11,000",
-   "detail_at": "2026-11-12T22:12:32+09:00",
+   "detail_at": "2026-11-13T03:56:34+09:00",
    "deposit_rate": 50,
    "prop_competition": "2687:1"
   },
@@ -1218,7 +1218,7 @@
    "price_band": "15,700 ~ 17,600",
    "competition": "834.73:1",
    "brokers": "대신증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-10-28",
    "forecast_end": "2026-11-03",
    "refund_date": "2026-11-11",
@@ -1228,7 +1228,7 @@
    "market": "코스닥",
    "code": "471800",
    "sub_limit": "20,000~24,000",
-   "detail_at": "2026-11-12T22:12:32+09:00",
+   "detail_at": "2026-11-13T03:56:34+09:00",
    "deposit_rate": 50,
    "listing_date": "2026-11-18",
    "prop_competition": "1669:1"
@@ -1242,7 +1242,7 @@
    "price_band": "4,700 ~ 5,700",
    "competition": "1851.14:1",
    "brokers": "IBK투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-02",
    "forecast_end": "2026-11-06",
    "refund_date": "2026-11-13",
@@ -1251,7 +1251,7 @@
    "market": "코스닥",
    "code": "271160",
    "sub_limit": "50,000~65,000",
-   "detail_at": "2026-11-12T22:12:32+09:00",
+   "detail_at": "2026-11-13T03:56:34+09:00",
    "inst_competition": "1051.38:1",
    "deposit_rate": 50,
    "listing_date": "2026-11-20",
@@ -1266,7 +1266,7 @@
    "price_band": "9,600 ~ 11,700",
    "competition": null,
    "brokers": "하나증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-02",
    "forecast_end": "2026-11-06",
    "refund_date": "2026-11-17",
@@ -1275,7 +1275,7 @@
    "market": "코스닥",
    "code": "498150",
    "sub_limit": "25,000~30,000",
-   "detail_at": "2026-11-12T22:12:32+09:00",
+   "detail_at": "2026-11-13T03:56:34+09:00",
    "listing_date": "2026-11-24",
    "deposit_rate": 50
   },
@@ -1296,7 +1296,7 @@
    "offer_amount": 29500,
    "market": "코스닥",
    "sub_limit": "12,000~14,000",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2347,
@@ -1315,7 +1315,7 @@
    "offer_amount": 113520,
    "market": "코스닥",
    "code": "951425",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2349,
@@ -1326,7 +1326,7 @@
    "price_band": "31,600 ~ 36,100",
    "competition": null,
    "brokers": "미래에셋증권,한국투자증권,삼성증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-09",
    "forecast_end": "2026-11-13",
    "refund_date": "2026-11-23",
@@ -1334,7 +1334,7 @@
    "offer_amount": 158000,
    "market": "거래소",
    "code": "083030",
-   "detail_at": "2026-11-12T22:12:32+09:00",
+   "detail_at": "2026-11-13T03:56:34+09:00",
    "listing_date": "2026-11-27"
   },
   {
@@ -1346,14 +1346,14 @@
    "price_band": "19,000 ~ 23,000",
    "competition": null,
    "brokers": "유진투자증권,신영증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-09",
    "forecast_end": "2026-11-13",
    "refund_date": "2026-11-23",
    "lockup_pct": 0,
    "offer_amount": 15200,
    "market": "코스닥",
-   "detail_at": "2026-11-12T22:12:32+09:00",
+   "detail_at": "2026-11-13T03:56:34+09:00",
    "listing_date": "2026-11-30"
   },
   {
@@ -1365,14 +1365,14 @@
    "price_band": "18,000 ~ 25,000",
    "competition": null,
    "brokers": "삼성증권,미래에셋증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-12",
    "forecast_end": "2026-11-18",
    "refund_date": "2026-11-26",
    "lockup_pct": 0,
    "offer_amount": 39060,
    "market": "코스닥",
-   "detail_at": "2026-11-12T22:12:32+09:00",
+   "detail_at": "2026-11-13T03:56:34+09:00",
    "listing_date": "2026-12-02"
   },
   {
@@ -1384,7 +1384,7 @@
    "price_band": "15,000 ~ 17,800",
    "competition": null,
    "brokers": "IBK투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-16",
    "forecast_end": "2026-11-20",
    "refund_date": "2026-11-27",
@@ -1392,7 +1392,7 @@
    "offer_amount": 30000,
    "market": "코스닥",
    "sub_limit": "25,000~30,000",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2341,
@@ -1403,7 +1403,7 @@
    "price_band": "9,700 ~ 12,200",
    "competition": null,
    "brokers": "삼성증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-16",
    "forecast_end": "2026-11-20",
    "refund_date": "2026-11-27",
@@ -1411,7 +1411,7 @@
    "offer_amount": 21340,
    "market": "코스닥",
    "sub_limit": "13,000~16,000",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2357,
@@ -1422,7 +1422,7 @@
    "price_band": "2,000 ~ 2,000",
    "competition": null,
    "brokers": "신영증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-19",
    "forecast_end": "2026-11-20",
    "refund_date": "2026-11-27",
@@ -1430,7 +1430,7 @@
    "offer_amount": 12500,
    "market": "코스닥",
    "sub_limit": "52,000~62,000",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2350,
@@ -1441,7 +1441,7 @@
    "price_band": "11,200 ~ 13,600",
    "competition": null,
    "brokers": "NH투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-19",
    "forecast_end": "2026-11-25",
    "refund_date": "2026-12-02",
@@ -1449,7 +1449,7 @@
    "offer_amount": 23520,
    "market": "코스닥",
    "sub_limit": "17,000~21,000",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2343,
@@ -1460,7 +1460,7 @@
    "price_band": "13,000 ~ 16,500",
    "competition": null,
    "brokers": "신영증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-20",
    "forecast_end": "2026-11-26",
    "refund_date": "2026-12-04",
@@ -1468,7 +1468,7 @@
    "offer_amount": 22100,
    "market": "코스닥",
    "sub_limit": "14,000~17,000",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2354,
@@ -1479,7 +1479,7 @@
    "price_band": "2,000 ~ 2,000",
    "competition": null,
    "brokers": "우리투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-25",
    "forecast_end": "2026-11-26",
    "refund_date": "2026-12-07",
@@ -1487,7 +1487,7 @@
    "offer_amount": 13000,
    "market": "코스닥",
    "sub_limit": "80,000~90,000",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2351,
@@ -1498,7 +1498,7 @@
    "price_band": "20,000 ~ 24,000",
    "competition": null,
    "brokers": "한국투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-26",
    "forecast_end": "2026-12-02",
    "refund_date": "2026-12-10",
@@ -1507,7 +1507,7 @@
    "market": "코스닥",
    "code": "464570",
    "sub_limit": "9,000~11,000",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2359,
@@ -1518,7 +1518,7 @@
    "price_band": "11,000 ~ 14,500",
    "competition": null,
    "brokers": "KB증권,NH투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-27",
    "forecast_end": "2026-12-03",
    "refund_date": "2026-12-11",
@@ -1526,7 +1526,7 @@
    "offer_amount": 26400,
    "market": "코스닥",
    "code": "363170",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2353,
@@ -1537,7 +1537,7 @@
    "price_band": "10,000 ~ 13,000",
    "competition": null,
    "brokers": "한국투자증권,BNK투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-30",
    "forecast_end": "2026-12-04",
    "refund_date": "2026-12-14",
@@ -1545,7 +1545,7 @@
    "offer_amount": 30000,
    "market": "코스닥",
    "code": "480200",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2358,
@@ -1556,7 +1556,7 @@
    "price_band": "12,300 ~ 16,600",
    "competition": null,
    "brokers": "대신증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-30",
    "forecast_end": "2026-12-04",
    "refund_date": "2026-12-14",
@@ -1564,7 +1564,7 @@
    "offer_amount": 12300,
    "market": "코스닥",
    "sub_limit": "8,000~10,000",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2348,
@@ -1575,7 +1575,7 @@
    "price_band": "5,400 ~ 6,800",
    "competition": null,
    "brokers": "KB증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-11-30",
    "forecast_end": "2026-12-04",
    "refund_date": "2026-12-15",
@@ -1584,7 +1584,7 @@
    "market": "코스닥",
    "code": "459650",
    "sub_limit": "33,000~40,000",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2355,
@@ -1595,7 +1595,7 @@
    "price_band": "19,000 ~ 23,000",
    "competition": null,
    "brokers": "NH투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-12-02",
    "forecast_end": "2026-12-08",
    "refund_date": "2026-12-17",
@@ -1604,7 +1604,7 @@
    "market": "코스닥",
    "code": "103060",
    "sub_limit": "23,400~28,000",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   },
   {
    "no": 2356,
@@ -1615,7 +1615,7 @@
    "price_band": "8,000 ~ 11,000",
    "competition": null,
    "brokers": "한국투자증권",
-   "updated_at": "2026-11-12T22:12:32+09:00",
+   "updated_at": "2026-11-13T03:56:34+09:00",
    "forecast_start": "2026-12-02",
    "forecast_end": "2026-12-08",
    "refund_date": "2026-12-17",
@@ -1624,7 +1624,7 @@
    "market": "코스닥",
    "code": "273940",
    "sub_limit": "9,000~11,000",
-   "detail_at": "2026-11-12T22:12:32+09:00"
+   "detail_at": "2026-11-13T03:56:34+09:00"
   }
  ]
 }
