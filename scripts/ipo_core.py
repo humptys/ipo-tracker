@@ -161,19 +161,32 @@ def refresh(items, pages=3, force=False):
     ts = now_kst().isoformat(timespec="seconds")
     today = now_kst().date()
     n_list = 0
+    live, ok_pages = {}, 0
     for p in range(1, pages + 1):
         try:
             rows = parse_list(fetch("%s/html/fund/index.htm?o=k&page=%d" % (SRC, p)))
         except Exception as e:
             print("list page %d failed: %s" % (p, e), file=sys.stderr)
             continue
+        ok_pages += 1
         n_list += len(rows)
         for r in rows:
+            live[r["no"]] = r["sub_start"]
             cur = items.setdefault(r["no"], {})
             for k, v in r.items():
                 if v is not None or k not in cur:
                     cur[k] = v
             cur["updated_at"] = ts
+
+    # 38 목록에서 사라진 종목(청약 연기·철회) 제거.
+    # 목록을 전부 읽었을 때만, 읽은 범위 안(가장 오래된 청약일보다 뒤)의 종목만 지움 -> 오래돼서 목록 밖으로 밀린 종목은 보존
+    n_removed = 0
+    if ok_pages == pages and len(live) >= 20:
+        lo = min(live.values())
+        for no in [no for no, s in items.items() if no not in live and (s.get("sub_start") or "") > lo]:
+            print("removed (38 목록에서 사라짐): %s %s %s" % (no, items[no].get("name"), items[no].get("sub_start")))
+            del items[no]
+            n_removed += 1
 
     # 시초가·첫날종가 (신규상장 목록, 한 페이지 20종목)
     n_open = 0
@@ -218,4 +231,4 @@ def refresh(items, pages=3, force=False):
                 if v is not None:
                     cur[k] = v
             cur["detail_at"] = ts
-    return {"list": n_list, "details": n_detail, "open": n_open}
+    return {"list": n_list, "details": n_detail, "open": n_open, "removed": n_removed}
