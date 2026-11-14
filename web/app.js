@@ -1624,3 +1624,8 @@ bind();
 loadAll();
 // 다른 기기에서 바꾼 내용 반영: 앱으로 돌아올 때 다시 불러오기
 document.addEventListener("visibilitychange", () => { if (!document.hidden && !document.querySelector("dialog[open]")) loadAll(); });
+
+// 앱 설치(홈 화면 앱)용 서비스 워커 등록
+if ("serviceWorker" in navigator && isSecureContext) {
+  addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
