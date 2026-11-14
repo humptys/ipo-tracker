@@ -409,3 +409,8 @@ input.tiny { width: 48px; border: 1px solid var(--border); border-radius: 6px; p
 .ics-list label:last-child { border-bottom: 0; }
 .ics-list .nm { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ics-list small { grid-column: 2; color: var(--muted); font-size: 12px; }
+/* 상단 이름: IPOT(IPO-Tracker) — 좁은 화면에서는 괄호 부분을 작게 */
+.brand h1 { white-space: nowrap; }
+.h1-sub { font-weight: 600; }
+@media (max-width: 480px) { .brand h1 { line-height: 1.1; } .h1-sub { display: block; font-size: 11px; font-weight: 500; color: var(--muted); } }
+@media (max-width: 400px) { .top-actions { gap: 5px; } .brand { gap: 7px; } #btnAdd { padding-left: 10px; padding-right: 10px; } }
