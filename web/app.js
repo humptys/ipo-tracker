@@ -1,5 +1,5 @@
 "use strict";
-/* 공모주 기록장 - GitHub Pages 버전 (외부 라이브러리 없음)
+/* IPOT (IPO-Tracker) - GitHub Pages 버전 (외부 라이브러리 없음)
  * - 공모주 일정: data/schedule.json (GitHub Actions가 6시간마다 38.co.kr에서 갱신)
  * - 내 기록: GitHub 저장소의 records.json (GitHub API로 읽기/쓰기). 미연결 시 이 기기(localStorage)에 저장.
  */
@@ -936,7 +936,7 @@ function buildIcs(events) {
     return out.join("\r\n");
   };
   const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
-  const L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//ipo-tracker//KO", "CALSCALE:GREGORIAN", "METHOD:PUBLISH", "X-WR-CALNAME:공모주 기록장"];
+  const L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//ipo-tracker//KO", "CALSCALE:GREGORIAN", "METHOD:PUBLISH", "X-WR-CALNAME:IPOT"];
   for (const e of events) {
     const rec = e.ref.rec ? S.records.find((r) => r.id === e.ref.rec) : null;
     const s = rec ? { ...(findSchedule(rec.name) || {}), ...rec } : S.schedule.find((x) => x.no === e.ref.sch) || {};

@@ -1,6 +1,6 @@
 {
-  "name": "공모주 기록장",
-  "short_name": "공모주 기록",
+  "name": "IPOT (IPO-Tracker)",
+  "short_name": "IPOT",
   "description": "공모주 일정 캘린더와 청약·배정·매도 수익률 기록",
   "id": "./",
   "start_url": "./",
