@@ -85,11 +85,21 @@ def won(n):
     return format(int(n), ",") if n not in (None, "") else "-"
 
 
-def send(title, message, tags="chart_with_upwards_trend", priority=4):
+def at_kst(hh, mm, day=None):
+    """오늘(또는 day) KST hh:mm"""
+    d = day or core.now_kst().date()
+    return core.datetime(d.year, d.month, d.day, hh, mm, tzinfo=core.KST)
+
+
+def send(title, message, tags="chart_with_upwards_trend", priority=4, at=None):
+    """at(KST datetime)을 주면 ntfy 서버가 그 시각에 보내도록 예약. 이미 지났으면 바로 보냄.
+    GitHub Actions 예약 실행은 수십 분씩 늦을 수 있어서, 일찍 실행해 두고 정확한 시각은 ntfy 예약에 맡김"""
     topic = os.environ.get("NTFY_TOPIC")
     payload = {"topic": topic, "title": title, "message": message, "tags": [tags], "priority": priority}
     if os.environ.get("APP_URL"):
         payload["click"] = os.environ["APP_URL"]
+    if at is not None and (at - core.now_kst()).total_seconds() > 30:
+        payload["delay"] = str(int(at.timestamp()))
     if os.environ.get("DRY_RUN") or not topic:
         print("[dry-run]" if topic else "[NTFY_TOPIC 없음]", json.dumps(payload, ensure_ascii=False, indent=1))
         return
@@ -99,7 +109,9 @@ def send(title, message, tags="chart_with_upwards_trend", priority=4):
         headers={"Content-Type": "application/json"},
     )
     with urllib.request.urlopen(req, timeout=20) as r:
-        print("sent:", r.status, title)
+        body = json.loads(r.read().decode("utf-8") or "{}")
+    when = core.datetime.fromtimestamp(body.get("time", 0), core.KST).strftime("%m-%d %H:%M") if body.get("time") else "?"
+    print("sent:", r.status, title, "| 도착 예정 %s KST" % when if "delay" in payload else "| 즉시")
 
 
 def check_secrets():
@@ -116,7 +128,9 @@ def check_secrets():
 def main():
     check_secrets()
     if os.environ.get("TEST"):
-        return send("📈 공모주 알림 테스트", "알림이 정상적으로 도착했어요.")
+        mins = int(os.environ.get("TEST_DELAY_MIN") or 0)
+        at = core.now_kst() + core.timedelta(minutes=mins) if mins else None
+        return send("📈 공모주 알림 테스트", "알림이 정상적으로 도착했어요." + (" (%d분 예약 테스트)" % mins if mins else ""), at=at)
     today = core.now_kst().date()
     t = today.isoformat()
     tm = (today + core.timedelta(days=1)).isoformat()
@@ -130,14 +144,18 @@ def main():
     for r in listing:
         qty = "%s주 배정 · " % won(r["allocated_qty"]) if r.get("allocated_qty") else ""
         send("📈 오늘 %s 상장!" % r["name"],
-             "%s%s · 공모가 %s원\n장 시작(09:00) 전에 매도 계획을 확인하세요." % (qty, r.get("broker") or "-", won(r.get("offer_price"))),
-             priority=5)
+             "%s%s · 공모가 %s원\n장 시작(09:00) 직전이에요. 매도 계획을 확인하세요." % (qty, r.get("broker") or "-", won(r.get("offer_price"))),
+             priority=5, at=at_kst(8, 58))
+    # 청약 마감일 15:30 (보통 16:00 마감)
+    if sub_end:
+        send("✍️ 오늘 청약 마감 %d건" % len(sub_end),
+             "\n".join("%s (%s)" % (r["name"], r.get("broker") or "-") for r in sub_end) + "\n보통 16:00에 마감돼요. 아직 안 넣었다면 지금 청약하세요.",
+             tags="pencil", priority=4, at=at_kst(15, 30))
     lines = []
     lines += ["내일 상장: %s (%s)" % (r["name"], r.get("broker") or "-") for r in tomorrow]
     lines += ["오늘 환불일: %s — 배정 수량을 입력하세요" % r["name"] for r in refund]
-    lines += ["오늘 청약 마감: %s (%s)" % (r["name"], r.get("broker") or "-") for r in sub_end]
     if lines:
-        send("📅 공모주 일정 알림", "\n".join(lines), tags="calendar", priority=3)
+        send("📅 공모주 일정 알림", "\n".join(lines), tags="calendar", priority=3, at=at_kst(8, 30))
 
     # 매도대금 출금 가능 (매도일 D+2 영업일) — 앱에서 '이체 완료' 체크할 때까지 매일 알림
     cash = []
@@ -152,8 +170,8 @@ def main():
     if cash:
         send("💰 매도대금 출금 가능 %d건" % len(cash),
              "\n".join(cash) + "\n증권사 계좌에서 내 계좌로 이체하고, 앱에서 '이체 완료'를 체크하세요.",
-             tags="moneybag", priority=4)
-    if not (listing or lines or cash):
+             tags="moneybag", priority=4, at=at_kst(8, 30))
+    if not (listing or sub_end or lines or cash):
         print("오늘(%s) 알림 없음" % t)
 
 

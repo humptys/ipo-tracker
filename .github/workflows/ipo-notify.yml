@@ -1,15 +1,21 @@
-# IPOT: 매일 아침 상장일 알림을 핸드폰(ntfy)으로 전송
+# IPOT: 매일 아침 공모주 알림을 핸드폰(ntfy)으로 예약 전송
+# GitHub 예약 실행은 수십 분 늦을 수 있어서 06시대에 일찍 실행하고, 알림 시각은 ntfy 예약으로 맞춤
+#   상장 08:58 · 청약 마감 15:30 · 일정/출금 08:30
 name: ipo-notify
 
 on:
   schedule:
-    - cron: "30 23 * * *"   # UTC 23:30 = KST 08:30 (GitHub 사정으로 수~수십 분 늦을 수 있음)
+    - cron: "7 21 * * *"    # UTC 21:07 = KST 06:07
   workflow_dispatch:
     inputs:
       test:
         description: "테스트 알림 보내기"
         type: boolean
         default: true
+      delay_min:
+        description: "테스트 알림을 몇 분 뒤로 예약할지 (0 = 바로)"
+        type: number
+        default: 0
 
 permissions:
   contents: read
@@ -30,4 +36,5 @@ jobs:
           RECORDS_PATH: ipo-tracker/records.json
           APP_URL: https://humptys.github.io/ipo-tracker/
           TEST: ${{ inputs.test && '1' || '' }}
+          TEST_DELAY_MIN: ${{ inputs.delay_min }}
         run: python scripts/notify.py
