@@ -1303,15 +1303,17 @@ function renderAlerts() {
   const add = (when, type, tag, r, detail) => day[when].push({ type, tag, r, detail });
   for (const r of S.records) {
     if (r.allocated_qty !== null && r.allocated_qty !== undefined && r.allocated_qty !== "" && +r.allocated_qty === 0) continue;
-    if (r.listing_date === t) add("today", "list", "상장", r, r.allocated_qty ? `${won(r.allocated_qty)}주 · 공모가 ${won(r.offer_price)}원` : "");
-    else if (r.listing_date === tm) add("tomorrow", "list", "상장", r, r.allocated_qty ? `${won(r.allocated_qty)}주` : "");
-    if (r.sub_end === t) add("today", "sub", "청약 마감", r, r.broker || "");
-    else if (r.sub_end === tm) add("tomorrow", "sub", "청약 마감", r, r.broker || "");
-    if (r.refund_date === t) add("today", "refund", "환불", r, "배정 수량 입력");
+    // 부가 정보: 증권사를 맨 앞에 (값은 모두 esc 처리)
+    const det = (...parts) => [r.broker, ...parts].filter(Boolean).map(esc).join(" · ");
+    if (r.listing_date === t) add("today", "list", "상장", r, det(r.allocated_qty && `${won(r.allocated_qty)}주`, r.allocated_qty && r.offer_price && `공모가 ${won(r.offer_price)}원`));
+    else if (r.listing_date === tm) add("tomorrow", "list", "상장", r, det(r.allocated_qty && `${won(r.allocated_qty)}주`));
+    if (r.sub_end === t) add("today", "sub", "청약 마감", r, det());
+    else if (r.sub_end === tm) add("tomorrow", "sub", "청약 마감", r, det());
+    if (r.refund_date === t) add("today", "refund", "환불", r, det("배정 수량 입력"));
   }
   for (const p of pendingCash()) {
     if (p.date > t) continue;
-    add("today", "cash", "출금", p.r, `${won(p.amt)}원${p.r.broker ? ` · ${esc(p.r.broker)}` : ""} · 이체했으면 체크`);
+    add("today", "cash", "출금", p.r, [p.r.broker, `${won(p.amt)}원`, "이체했으면 체크"].filter(Boolean).map(esc).join(" · "));
   }
   const chip = (m) => `<button class="al-chip t-${m.type}" data-rec="${esc(m.r.id)}"><span class="al-tag">${m.tag}</span><b>${esc(m.r.name)}</b>${m.detail ? `<small>${m.detail}</small>` : ""}</button>`;
   const row = (key, label) => {
