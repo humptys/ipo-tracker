@@ -1300,7 +1300,7 @@ function renderAlerts() {
   // 날짜(오늘/내일)별로 묶고, 그 안에서는 종류(출금 → 상장 → 청약 → 환불) 순서로 보여 줌
   const ORDER = { cash: 0, list: 1, sub: 2, refund: 3 };
   const day = { today: [], tomorrow: [] };
-  const add = (when, type, tag, r, detail) => day[when].push({ type, tag, r, detail });
+  const add = (when, type, tag, r, detail, mine = true) => day[when].push({ type, tag, r, detail, mine });
   for (const r of S.records) {
     if (r.allocated_qty !== null && r.allocated_qty !== undefined && r.allocated_qty !== "" && +r.allocated_qty === 0) continue;
     // 부가 정보: 증권사를 맨 앞에 (값은 모두 esc 처리)
@@ -1311,13 +1311,22 @@ function renderAlerts() {
     else if (r.sub_end === tm) add("tomorrow", "sub", "청약 마감", r, det());
     if (r.refund_date === t) add("today", "refund", "환불", r, det("배정 수량 입력"));
   }
+  // 청약 마감은 내가 청약하지 않은 종목도 모두 표시 (출금·상장·환불은 내 기록만)
+  for (const s of S.schedule) {
+    if (myRecordFor(s)) continue; // 내 기록이 있으면 위에서 이미 처리
+    const when = s.sub_end === t ? "today" : s.sub_end === tm ? "tomorrow" : null;
+    if (!when) continue;
+    const price = s.offer_price ? `${won(s.offer_price)}원` : s.price_band ? `희망 ${s.price_band}` : "";
+    add(when, "sub", "청약 마감", { id: null, sch: s.no, name: s.name }, [(s.brokers || "").replace(/,\s*/g, ", "), price].filter(Boolean).map(esc).join(" · "), false);
+  }
   for (const p of pendingCash()) {
     if (p.date > t) continue;
     add("today", "cash", "출금", p.r, [p.r.broker, `${won(p.amt)}원`, "이체했으면 체크"].filter(Boolean).map(esc).join(" · "));
   }
-  const chip = (m) => `<button class="al-chip t-${m.type}" data-rec="${esc(m.r.id)}"><span class="al-tag">${m.tag}</span><b>${esc(m.r.name)}</b>${m.detail ? `<small>${m.detail}</small>` : ""}</button>`;
+  // 내 종목은 ★, 내가 청약하지 않은 종목은 흐리게 (누르면 일정 상세)
+  const chip = (m) => `<button class="al-chip t-${m.type}${m.mine ? "" : " other"}" ${m.mine ? `data-rec="${esc(m.r.id)}"` : `data-sch="${esc(m.r.sch)}"`}><span class="al-tag">${m.tag}</span><b>${m.mine ? "★ " : ""}${esc(m.r.name)}</b>${m.detail ? `<small>${m.detail}</small>` : ""}</button>`;
   const row = (key, label) => {
-    const list = day[key].sort((a, b) => ORDER[a.type] - ORDER[b.type]);
+    const list = day[key].sort((a, b) => ORDER[a.type] - ORDER[b.type] || b.mine - a.mine);
     return list.length ? `<div class="al-row"><span class="al-day ${key}">${label}</span><div class="al-list">${list.map(chip).join("")}</div></div>` : "";
   };
   const bar = $("#alertBar");
